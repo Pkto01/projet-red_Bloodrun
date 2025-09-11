@@ -1,7 +1,7 @@
 package main
 
-func initCharacter(Name string, Class string, Level int, Pvmax int, Pv int, Inventory []string) character {
-	return character{
+func initCharacter(Name string, Class string, Level int, Pvmax int, Pv int, Inventory []string) Character {
+	return Character{
 		Name:      "Your name",
 		Class:     "Elfe",
 		Level:     1,
