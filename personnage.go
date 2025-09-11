@@ -1,4 +1,4 @@
-package projet-red-Bloodrun2
+package main
 
 type Character struct {
 	Name      string
@@ -8,5 +8,3 @@ type Character struct {
 	Pv        int
 	Inventory []string
 }
-
-
