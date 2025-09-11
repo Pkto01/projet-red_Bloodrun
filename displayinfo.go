@@ -9,4 +9,5 @@ func displayInfo() {
 	fmt.Println("Level : ", Level)
 	fmt.Println("Pvmax : ", Pvmax)
 	fmt.Println("Pv : ", Pv)
+
 }
