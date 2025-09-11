@@ -1,4 +1,4 @@
-package projet_red_Bloodrun
+package main
 
 import "fmt"
 
