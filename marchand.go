@@ -80,7 +80,7 @@ func afficherInfos(j *Joueur) {
 }
 
 // --- Entrée utilisateur ---
-func lireEntree(texte string) string {
+func lire(texte string) string {
 	fmt.Print(texte)
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()

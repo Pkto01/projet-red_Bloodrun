@@ -2,15 +2,16 @@ package main
 
 import "fmt"
 
-func accessInventory(inventory []string) {
-	if len(inventory) == 0 {
-		fmt.Println("L'inventaire est vide !")
+func accessInventory(j *Joueur) {
+	fmt.Println("\n--- Inventaire ---")
+	if len(j.Inventaire) == 0 {
+		fmt.Println("Inventaire vide !")
 		return
 	}
-
-	for i, item := range inventory {
-		fmt.Printf("%d: %s\n", i+1, item)
+	for i, item := range j.Inventaire {
+		fmt.Printf("%d. %s\n", i+1, item)
 	}
+	fmt.Printf("\nArgent restant : %d pièces\n", j.Argent)
 }
 
 func takePot(c *Character) {
