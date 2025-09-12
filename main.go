@@ -7,8 +7,8 @@ import (
 )
 
 func main() {
-	arthur := character.InitCharacter("Arthur", "Barbare", 1, 100, 40, []string{"potion", "potion", "potion"})
-	display.DisplayInfo(arthur)
+	arthur := character.InitCharacter("Arthur", "Barbare", 1, 40, 100, 40, []string{"potion", "potion", "potion"})
+	display.Money(&arthur)
 }
 
 func isDead(j character.Character) {
