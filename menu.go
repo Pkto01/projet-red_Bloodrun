@@ -24,7 +24,7 @@ func lireEntree(texte string) string {
 	return strings.TrimSpace(scanner.Text())
 }
 
-func main() {
+func MENU() {
 	quitter := false
 
 	for !quitter {
