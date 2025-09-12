@@ -1,10 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"projet-red_Bloodrun/character"
+	"projet-red_Bloodrun/display"
+)
 
 func main() {
-	arthur := initCharacter("Arthur", "Barbare", 1, 100, 40, []string{"potion", "potion", "potion"})
-	displayInfo(arthur)
+	arthur := character.InitCharacter("Arthur", "Barbare", 1, 100, 40, []string{"potion", "potion", "potion"})
+	display.DisplayInfo(arthur)
 }
 
 func isDead(j *Joueur) {

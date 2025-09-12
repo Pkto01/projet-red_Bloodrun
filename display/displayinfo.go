@@ -1,8 +1,11 @@
 package display
 
-import "fmt"
+import (
+	"fmt"
+	"projet-red_Bloodrun/character"
+)
 
-func displayInfo(c Character) {
+func DisplayInfo(c character.Character) {
 	fmt.Println("Name : ", c.Name)
 	fmt.Println("Class : ", c.Class)
 	fmt.Println("Level : ", c.Level)

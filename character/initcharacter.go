@@ -1,6 +1,6 @@
-package main
+package character
 
-func initCharacter(Name string, Class string, Level int, Pvmax int, Pv int, Inventory []string) Character {
+func InitCharacter(Name string, Class string, Level int, Pvmax int, Pv int, Inventory []string) Character {
 	return Character{
 		Name:      Name,
 		Class:     Class,
