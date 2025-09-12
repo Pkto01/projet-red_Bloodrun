@@ -1,20 +1,23 @@
 package display
 
-import "fmt"
+import (
+	"fmt"
+	"projet-red_Bloodrun/character"
+)
 
-func accessInventory(j *Joueur) {
+func accessInventory(j *character.Character) {
 	fmt.Println("\n--- Inventaire ---")
-	if len(j.Inventaire) == 0 {
+	if len(j.Inventory) == 0 {
 		fmt.Println("Inventaire vide !")
 		return
 	}
-	for i, item := range j.Inventaire {
+	for i, item := range j.Inventory {
 		fmt.Printf("%d. %s\n", i+1, item)
 	}
-	fmt.Printf("\nArgent restant : %d pièces\n", j.Argent)
+	fmt.Printf("\nArgent restant : %d pièces\n", j.Money)
 }
 
-func takePot(c *Character) {
+func takePot(c *character.Character) {
 	// Cherche une potion
 	found := -1
 	for i, item := range c.Inventory {
