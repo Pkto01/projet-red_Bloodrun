@@ -2,12 +2,11 @@ package main
 
 import "fmt"
 
-func displayInfo() {
-	Name, Class, Level, Pvmax, Pv := initCharacter()
-	fmt.Println("Name : ", Name)
-	fmt.Println("Class : ", Class)
-	fmt.Println("Level : ", Level)
-	fmt.Println("Pvmax : ", Pvmax)
-	fmt.Println("Pv : ", Pv)
-
+func displayInfo(c Character) {
+	fmt.Println("Name : ", c.Name)
+	fmt.Println("Class : ", c.Class)
+	fmt.Println("Level : ", c.Level)
+	fmt.Println("Pvmax : ", c.Pvmax)
+	fmt.Println("Pv : ", c.Pv)
+	fmt.Println("Inventory : ", c.Inventory)
 }
