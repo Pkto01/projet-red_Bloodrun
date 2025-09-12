@@ -4,17 +4,10 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"projet-red_Bloodrun/character"
 	"strconv"
 	"strings"
 )
-
-type Joueur struct {
-	Nom        string
-	Argent     int
-	PV         int
-	PVmax      int
-	Inventaire []string
-}
 
 type Item struct {
 	Nom  string
@@ -22,16 +15,16 @@ type Item struct {
 }
 
 // --- Fonctions Inventaire ---
-func addInventory(j *Joueur, item Item) {
-	j.Inventaire = append(j.Inventaire, item.Nom)
+func addInventory(j character.Character, item Item) {
+	j.Inventory = append(j.Inventory, item.Nom)
 	fmt.Printf(">> Vous avez acheté : %s\n", item.Nom)
 }
 
 // --- Marchand ---
-func marchand(j *Joueur, shop []Item) {
+func marchand(j character.Character, shop []Item) {
 	for {
 		fmt.Println("\n=== Marchand ===")
-		fmt.Printf("Argent disponible : %d pièces\n", j.Argent)
+		fmt.Printf("Argent disponible : %d pièces\n", j.Money)
 		for i, item := range shop {
 			fmt.Printf("%d. %s (%d pièces)\n", i+1, item.Nom, item.Prix)
 		}
@@ -49,8 +42,8 @@ func marchand(j *Joueur, shop []Item) {
 		}
 
 		item := shop[num-1]
-		if j.Argent >= item.Prix {
-			j.Argent -= item.Prix
+		if j.Money >= item.Prix {
+			j.Money -= item.Prix
 			addInventory(j, item)
 		} else {
 			fmt.Println("Pas assez d'argent !")
@@ -59,11 +52,11 @@ func marchand(j *Joueur, shop []Item) {
 }
 
 // --- Infos joueur ---
-func afficherInfos(j *Joueur) {
+func afficherInfos(j character.Character) {
 	fmt.Println("\n--- Infos du personnage ---")
-	fmt.Printf("Nom : %s\n", j.Nom)
-	fmt.Printf("PV : %d / %d\n", j.PV, j.PVmax)
-	fmt.Printf("Argent : %d pièces\n", j.Argent)
+	fmt.Printf("Nom : %s\n", j.Name)
+	fmt.Printf("PV : %d / %d\n", j.Pv, j.Pvmax)
+	fmt.Printf("Argent : %d pièces\n", j.Money)
 	accessInventory(j)
 }
 
@@ -77,14 +70,6 @@ func lire(texte string) string {
 
 // --- Programme principal ---
 func argent() {
-	// Joueur
-	joueur := Joueur{
-		Nom:        "Héros",
-		Argent:     100, // Le joueur commence avec 100 pièces
-		PV:         70,
-		PVmax:      100,
-		Inventaire: []string{},
-	}
 
 	// Boutique du marchand
 	shop := []Item{
@@ -106,11 +91,11 @@ func argent() {
 
 		switch choix {
 		case "1":
-			afficherInfos(&joueur)
+			DisplayInfo(&character.Character)
 		case "2":
-			accessInventory(&joueur)
+			accessInventory(&character.Character.Inventory)
 		case "3":
-			marchand(&joueur, shop)
+			marchand(&character.Character, shop)
 		case "4":
 			fmt.Println("Au revoir !")
 			quitter = true
