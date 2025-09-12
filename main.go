@@ -11,11 +11,11 @@ func main() {
 	display.DisplayInfo(arthur)
 }
 
-func isDead(j *Joueur) {
-	if j.PV <= 0 {
-		fmt.Printf("%s est mort...\n", j.Nom)
+func isDead(j character.Character) {
+	if j.Pv <= 0 {
+		fmt.Printf("%s est mort...\n", j.Name)
 		// Résurrection avec 50% des PV max
-		j.PV = j.PVmax / 2
-		fmt.Printf("%s est ressuscité avec %d/%d PV !\n", j.Nom, j.PV, j.PVmax)
+		j.Pv = j.Pvmax / 2
+		fmt.Printf("%s est ressuscité avec %d/%d PV !\n", j.Name, j.Pv, j.Pvmax)
 	}
 }
