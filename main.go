@@ -1,5 +1,5 @@
 package main
 
 func main() {
-	displayInfo()
+	displayInfo(Character{})
 }
