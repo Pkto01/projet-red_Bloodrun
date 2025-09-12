@@ -91,7 +91,7 @@ func argent() {
 
 		switch choix {
 		case "1":
-			afficherInfos(&character.Character)
+			DisplayInfo(&character.Character)
 		case "2":
 			accessInventory(&character.Character.Inventory)
 		case "3":
