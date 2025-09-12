@@ -14,10 +14,10 @@ func accessInventory(inventory []string) {
 }
 
 func takePot(c *Character) {
-	// Vérifie s'il y a une potion dans l'inventaire
+	// Cherche une potion
 	found := -1
 	for i, item := range c.Inventory {
-		if item == "potion" || item == "3 potions" { // selon comment tu nommes
+		if item == "potion" {
 			found = i
 			break
 		}
@@ -28,8 +28,10 @@ func takePot(c *Character) {
 		return
 	}
 
+	// Supprime UNE potion
 	c.Inventory = append(c.Inventory[:found], c.Inventory[found+1:]...)
 
+	// Soigne le perso
 	c.Pv += 50
 	if c.Pv > c.Pvmax {
 		c.Pv = c.Pvmax
