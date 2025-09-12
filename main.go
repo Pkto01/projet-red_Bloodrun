@@ -3,7 +3,6 @@ package main
 import "fmt"
 
 func main() {
-	displayInfo()
 	arthur := initCharacter("Arthur", "Barbare", 1, 100, 40, []string{"potion", "potion", "potion"})
 	displayInfo(arthur)
 }
