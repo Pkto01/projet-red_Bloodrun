@@ -1,4 +1,4 @@
-package main
+package display
 
 import (
 	"bufio"
@@ -25,18 +25,6 @@ type Item struct {
 func addInventory(j *Joueur, item Item) {
 	j.Inventaire = append(j.Inventaire, item.Nom)
 	fmt.Printf(">> Vous avez acheté : %s\n", item.Nom)
-}
-
-func accessInventory(j *Joueur) {
-	fmt.Println("\n--- Inventaire ---")
-	if len(j.Inventaire) == 0 {
-		fmt.Println("Inventaire vide !")
-		return
-	}
-	for i, item := range j.Inventaire {
-		fmt.Printf("%d. %s\n", i+1, item)
-	}
-	fmt.Printf("\nArgent restant : %d pièces\n", j.Argent)
 }
 
 // --- Marchand ---
