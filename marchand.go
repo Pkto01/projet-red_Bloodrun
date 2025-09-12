@@ -88,7 +88,7 @@ func lireEntree(texte string) string {
 }
 
 // --- Programme principal ---
-func main() {
+func argent() {
 	// Joueur
 	joueur := Joueur{
 		Nom:        "Héros",
