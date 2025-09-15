@@ -57,7 +57,7 @@ func afficherInfos(j character.Character) {
 	fmt.Printf("Nom : %s\n", j.Name)
 	fmt.Printf("PV : %d / %d\n", j.Pv, j.Pvmax)
 	fmt.Printf("Argent : %d pièces\n", j.Money)
-	accessInventory(j)
+	AccessInventory(&j)
 }
 
 // --- Entrée utilisateur ---
@@ -69,7 +69,7 @@ func lire(texte string) string {
 }
 
 // --- Programme principal ---
-func argent() {
+func Money(j *character.Character) {
 
 	// Boutique du marchand
 	shop := []Item{
@@ -91,11 +91,11 @@ func argent() {
 
 		switch choix {
 		case "1":
-			DisplayInfo(&character.Character)
+			DisplayInfo(*j)
 		case "2":
-			accessInventory(&character.Character.Inventory)
+			AccessInventory(j)
 		case "3":
-			marchand(&character.Character, shop)
+			marchand(*j, shop)
 		case "4":
 			fmt.Println("Au revoir !")
 			quitter = true
