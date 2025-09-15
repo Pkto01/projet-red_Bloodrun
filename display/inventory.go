@@ -7,13 +7,34 @@ import (
 
 func AccessInventory(j *character.Character) {
 	fmt.Println("\n--- Inventaire ---")
-	if len(j.Inventory) == 0 {
+
+	// Compter le nombre de potions
+	potionCount := 0
+	var otherItems []string
+
+	for _, item := range j.Inventory {
+		if item == "Potion de vie" {
+			potionCount++
+		} else {
+			otherItems = append(otherItems, item)
+		}
+	}
+
+	// Afficher les potions
+	if potionCount > 0 {
+		fmt.Printf("%d. %d Potions de vie\n", 1, potionCount)
+	}
+
+	// Afficher les autres items
+	for i, item := range otherItems {
+		fmt.Printf("%d. %s\n", potionCount+1+i, item)
+	}
+
+	if potionCount == 0 && len(otherItems) == 0 {
 		fmt.Println("Inventaire vide !")
 		return
 	}
-	for i, item := range j.Inventory {
-		fmt.Printf("%d. %s\n", i+1, item)
-	}
+
 	fmt.Printf("\nArgent restant : %d pièces\n", j.Money)
 
 	quitter := false
@@ -21,9 +42,7 @@ func AccessInventory(j *character.Character) {
 		fmt.Println("\n=== Menu Inventaire ===")
 		fmt.Println("1. Utiliser une potion de vie")
 		fmt.Println("4. Quitter")
-
 		choix := lireEntree("Votre choix : ")
-
 		switch choix {
 		case "1":
 			takePot(j)
@@ -63,4 +82,6 @@ func takePot(c *character.Character) {
 	}
 
 	fmt.Printf("%s utilise une potion de vie (+%d PV) ! PV : %d/%d\n", c.Name, heal, c.Pv, c.Pvmax)
+
+	AccessInventory(c)
 }

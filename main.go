@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	arthur := character.InitCharacter("Arthur", "Barbare", 1, 40, 100, 40, []string{"potion", "potion", "potion"})
+	arthur := character.InitCharacter("Arthur", "Barbare", 1, 40, 100, 40, []string{"Potion de vie", "Potion de vie", "Potion de vie"})
 	display.Money(&arthur)
 }
 
