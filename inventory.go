@@ -1,20 +1,20 @@
-package display
+package main
 
 import (
 	"fmt"
 	"projet-red_Bloodrun/character"
 )
 
-func AccessInventory(j *character.Character) {
+func accessInventory(j *Joueur) {
 	fmt.Println("\n--- Inventaire ---")
-	if len(j.Inventory) == 0 {
+	if len(j.Inventaire) == 0 {
 		fmt.Println("Inventaire vide !")
 		return
 	}
-	for i, item := range j.Inventory {
+	for i, item := range j.Inventaire {
 		fmt.Printf("%d. %s\n", i+1, item)
 	}
-	fmt.Printf("\nArgent restant : %d pièces\n", j.Money)
+	fmt.Printf("\nArgent restant : %d pièces\n", j.Argent)
 }
 
 func takePot(c *character.Character) {
