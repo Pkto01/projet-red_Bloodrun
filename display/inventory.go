@@ -18,13 +18,17 @@ func AccessInventory(j *character.Character) {
 
 	quitter := false
 	for !quitter {
+		fmt.Println("\n=== Menu Inventaire ===")
+		fmt.Println("1. Utiliser une potion de vie")
 		fmt.Println("4. Quitter")
 
 		choix := lireEntree("Votre choix : ")
 
 		switch choix {
+		case "1":
+			takePot(j)
 		case "4":
-			fmt.Println("Au revoir !")
+			fmt.Println("Retour au menu principal.")
 			quitter = true
 		default:
 			fmt.Println("Choix invalide !")
@@ -32,18 +36,19 @@ func AccessInventory(j *character.Character) {
 	}
 }
 
+// --- Utilisation d'une potion ---
 func takePot(c *character.Character) {
-	// Cherche une potion
+	// Cherche une potion de vie
 	found := -1
 	for i, item := range c.Inventory {
-		if item == "potion" {
+		if item == "Potion de vie" {
 			found = i
 			break
 		}
 	}
 
 	if found == -1 {
-		fmt.Println("Pas de potion dans l'inventaire !")
+		fmt.Println("Pas de Potion de vie dans l'inventaire !")
 		return
 	}
 
@@ -51,10 +56,11 @@ func takePot(c *character.Character) {
 	c.Inventory = append(c.Inventory[:found], c.Inventory[found+1:]...)
 
 	// Soigne le perso
-	c.Pv += 50
+	heal := 50
+	c.Pv += heal
 	if c.Pv > c.Pvmax {
 		c.Pv = c.Pvmax
 	}
 
-	fmt.Printf("%s utilise une potion ! PV : %d/%d\n", c.Name, c.Pv, c.Pvmax)
+	fmt.Printf("%s utilise une potion de vie (+%d PV) ! PV : %d/%d\n", c.Name, heal, c.Pv, c.Pvmax)
 }
