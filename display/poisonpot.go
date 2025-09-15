@@ -1,19 +1,20 @@
-package main
+package display
 
 import (
 	"fmt"
+	"projet-red_Bloodrun/character"
 	"time"
 )
 
-func (c *Character) poisonPot() {
+func poisonPot(c *character.Character) {
 
 	fmt.Println("La potion de poison est activée!")
 	for i := 0; i < 3; i++ {
 		time.Sleep(1 * time.Second)
-		c.PointsDeVieActuels -= 10
-		if c.PointsDeVieActuels < 0 {
-			c.PointsDeVieActuels = 0
+		c.Pv -= 10
+		if c.Pv < 0 {
+			c.Pv = 0
 		}
-		fmt.Printf("Dégâts infligés! Points de vie actuels: %d/%d\n", c.PointsDeVieActuels, c.PointsDeVieMax)
+		fmt.Printf("Dégâts infligés! Points de vie actuels: %d/%d\n", c.Pv, c.Pvmax)
 	}
 }
