@@ -15,6 +15,21 @@ func AccessInventory(j *character.Character) {
 		fmt.Printf("%d. %s\n", i+1, item)
 	}
 	fmt.Printf("\nArgent restant : %d pièces\n", j.Money)
+
+	quitter := false
+	for !quitter {
+		fmt.Println("4. Quitter")
+
+		choix := lireEntree("Votre choix : ")
+
+		switch choix {
+		case "4":
+			fmt.Println("Au revoir !")
+			quitter = true
+		default:
+			fmt.Println("Choix invalide !")
+		}
+	}
 }
 
 func takePot(c *character.Character) {
