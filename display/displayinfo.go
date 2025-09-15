@@ -11,5 +11,4 @@ func DisplayInfo(c character.Character) {
 	fmt.Println("Level : ", c.Level)
 	fmt.Println("Pvmax : ", c.Pvmax)
 	fmt.Println("Pv : ", c.Pv)
-	fmt.Println("Inventory : ", c.Inventory)
 }
