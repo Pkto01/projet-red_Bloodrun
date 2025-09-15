@@ -15,7 +15,7 @@ type Item struct {
 }
 
 // --- Fonctions Inventaire ---
-func addInventory(j character.Character, item Item) {
+func addInventory(j *character.Character, item Item) {
 	j.Inventory = append(j.Inventory, item.Nom)
 	fmt.Printf(">> Vous avez acheté : %s\n", item.Nom)
 }
@@ -44,7 +44,7 @@ func marchand(j *character.Character, shop []Item) {
 		item := shop[num-1]
 		if j.Money >= item.Prix {
 			j.Money -= item.Prix
-			addInventory(*j, item)
+			addInventory(j, item)
 		} else {
 			fmt.Println("Pas assez d'argent !")
 		}
