@@ -21,7 +21,7 @@ func addInventory(j character.Character, item Item) {
 }
 
 // --- Marchand ---
-func marchand(j character.Character, shop []Item) {
+func marchand(j *character.Character, shop []Item) {
 	for {
 		fmt.Println("\n=== Marchand ===")
 		fmt.Printf("Argent disponible : %d pièces\n", j.Money)
@@ -44,7 +44,7 @@ func marchand(j character.Character, shop []Item) {
 		item := shop[num-1]
 		if j.Money >= item.Prix {
 			j.Money -= item.Prix
-			addInventory(j, item)
+			addInventory(*j, item)
 		} else {
 			fmt.Println("Pas assez d'argent !")
 		}
@@ -95,7 +95,7 @@ func Money(j *character.Character) {
 		case "2":
 			AccessInventory(j)
 		case "3":
-			marchand(*j, shop)
+			marchand(j, shop)
 		case "4":
 			fmt.Println("Au revoir !")
 			quitter = true
