@@ -64,13 +64,54 @@ func spellBook(skills []string, newSpell string) []string {
 	return append(skills, newSpell) // sinon on l'ajoute
 }
 
+func shopitem(class string) []display.Item {
+	// Objet commun à tous les magasins
+	potionDeVie := display.Item{Nom: "Potion de vie", Prix: 20}
+
+	switch class {
+	case "Doom Slayer":
+		fmt.Println(Yellow + "Le forgeron vous montre ses lames les plus affûtées." + Reset)
+		return []display.Item{
+			potionDeVie,
+			{Nom: "Hache de Berserker", Prix: 150},
+			{Nom: "Bottes de Célérité", Prix: 70},
+			{Nom: "Gantelets de Force", Prix: 85},
+		}
+	case "Doom Caster":
+		fmt.Println(Yellow + "L'enchanteur étale ses parchemins et artefacts mystiques." + Reset)
+		return []display.Item{
+			potionDeVie,
+			{Nom: "Bâton d'Apprenti", Prix: 70},
+			{Nom: "Robe de Mage", Prix: 60},
+			{Nom: "Grimoire des Ombres", Prix: 200},
+		}
+	case "Doom Bastion":
+		fmt.Println(Yellow + "L'armurier présente ses pièces les plus robustes." + Reset)
+		return []display.Item{
+			potionDeVie,
+			{Nom: "Marteau Lourd", Prix: 90},
+			{Nom: "Bouclier en Acier", Prix: 120},
+			{Nom: "Armure de Plaques", Prix: 180},
+		}
+	default:
+		// Un magasin par défaut si la classe n'est pas reconnue
+		fmt.Println(Yellow + "Le marchand vous propose ses articles de base." + Reset)
+		return []display.Item{
+			potionDeVie,
+			{Nom: "Dague Rouillée", Prix: 25},
+			{Nom: "Tunique en Cuir", Prix: 30},
+		}
+	}
+}
+
 func Menu(j *character.Character) {
 	quitter := false
 	for !quitter {
 		afficherEnTete()
 		afficherOption(1, "Afficher les infos", "🧙")
 		afficherOption(2, "Accéder à l'inventaire", "🎒")
-		afficherOption(3, "Quitter le jeu", "🚪")
+		afficherOption(3, "Accéder au Marchant", "🛒")
+		afficherOption(4, "Quitter le jeu", "🚪")
 		afficherSeparateur()
 
 		choix := display.LireEntree("\n" + Gray + "👉 Votre choix [" + Cyan + "1-3" + Gray + "] : " + Reset)
@@ -93,6 +134,10 @@ func Menu(j *character.Character) {
 				}
 			}
 		case "3":
+			loadingAnimation("Arrivée chez le Marchand")
+			// fmt.Println(Green + Bold + ">> " + Reset + "Bienvenue chez le Marchand ! 🛒")
+			display.Marchand(j, shopitem(j.Class))
+		case "4":
 			fmt.Println(Red + Bold + ">> " + Reset + "Merci d'avoir joué à Bloodrun ! 💀")
 			quitter = true
 		default:
