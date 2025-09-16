@@ -135,7 +135,6 @@ func Menu(j *character.Character) {
 			}
 		case "3":
 			loadingAnimation("Arrivée chez le Marchand")
-			// fmt.Println(Green + Bold + ">> " + Reset + "Bienvenue chez le Marchand ! 🛒")
 			display.Marchand(j, shopitem(j.Class))
 		case "4":
 			fmt.Println(Red + Bold + ">> " + Reset + "Merci d'avoir joué à Bloodrun ! 💀")
