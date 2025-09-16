@@ -14,14 +14,14 @@ type Item struct {
 // --- Fonctions Inventaire ---
 func getInventoryLimit(class string) int {
 	switch class {
-	case "Caster":
+	case "Doom Caster":
 		return 7
-	case "Slayer":
+	case "Doom Slayer":
 		return 11
-	case "Bastion":
+	case "Doom Bastion":
 		return 15
 	default:
-		return 5
+		return 0
 	}
 }
 
@@ -62,6 +62,43 @@ func Marchand(j *character.Character, shop []Item) {
 			addInventory(j, item)
 		} else {
 			fmt.Println("Pas assez d'argent !")
+		}
+	}
+}
+
+func Forgeron(j *character.Character) {
+	// Liste fixe des équipements
+	equipements := []string{
+		"Chapeau de l’aventurier",
+		"Tunique de l’aventurier",
+		"Bottes de l’aventurier",
+	}
+
+	for {
+		fmt.Println("\n=== Forgeron ===")
+		fmt.Printf("Argent disponible : %d pièces\n", j.Money)
+		for i, eq := range equipements {
+			fmt.Printf("%d. %s (5 pièces)\n", i+1, eq)
+		}
+		fmt.Println("0. Retour")
+
+		choix := LireEntree("Votre choix : ")
+		num, err := strconv.Atoi(choix)
+		if err != nil || num < 0 || num > len(equipements) {
+			fmt.Println("Choix invalide.")
+			continue
+		}
+
+		if num == 0 {
+			return
+		}
+
+		if j.Money >= 5 {
+			j.Money -= 5
+			// Vérifie limite d’inventaire avant ajout
+			addInventory(j, Item{Nom: equipements[num-1], Prix: 5})
+		} else {
+			fmt.Println("Pas assez d'argent pour fabriquer cet équipement !")
 		}
 	}
 }
