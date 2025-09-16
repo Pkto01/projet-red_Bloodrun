@@ -55,6 +55,15 @@ func loadingAnimation(msg string) {
 	fmt.Println()
 }
 
+func spellBook(skills []string, newSpell string) []string {
+	for _, spell := range skills {
+		if spell == newSpell {
+			return skills // le sort existe déjà, on ne fait rien
+		}
+	}
+	return append(skills, newSpell) // sinon on l'ajoute
+}
+
 func Menu(j *character.Character) {
 	quitter := false
 	for !quitter {
@@ -117,4 +126,14 @@ func main() {
 	)
 
 	Menu(&arthur)
+
+	skills := []string{"Soin", "Téléportation"}
+
+	// Ajouter "Boule de feu"
+	skills = spellBook(skills, "Boule de feu")
+	fmt.Println(skills)
+
+	// Essayer de l'ajouter à nouveau
+	skills = spellBook(skills, "Boule de feu")
+	fmt.Println(skills)
 }

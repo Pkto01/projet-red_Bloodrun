@@ -13,6 +13,10 @@ type Item struct {
 
 // --- Fonctions Inventaire ---
 func addInventory(j *character.Character, item Item) {
+	if len(j.Inventory) >= 10 {
+		fmt.Println("Inventaire plein ! Impossible d'ajouter :", item)
+		return
+	}
 	j.Inventory = append(j.Inventory, item.Nom)
 	fmt.Printf(">> Vous avez acheté : %s\n", item.Nom)
 }
