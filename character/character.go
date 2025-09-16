@@ -7,5 +7,6 @@ type Character struct {
 	Money     int
 	Pvmax     int
 	Pv        int
+	skills    []string
 	Inventory []string
 }

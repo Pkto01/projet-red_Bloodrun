@@ -17,13 +17,15 @@ const (
 	Bold   = "\033[1m"
 )
 
-func lireEntree(texte string) string {
+// LireEntree lit une entrée de l'utilisateur depuis la console
+func LireEntree(texte string) string {
 	fmt.Print(Cyan + texte + Reset)
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
 	return strings.TrimSpace(scanner.Text())
 }
 
+// Menu n'est pas utilisé actuellement mais reste disponible
 func Menu() {
 	quitter := false
 
@@ -37,7 +39,7 @@ func Menu() {
 		fmt.Println(Green + "2." + Reset + " Accéder à l'inventaire")
 		fmt.Println(Green + "3." + Reset + " Quitter")
 
-		choix := lireEntree("\nVotre choix : ")
+		choix := LireEntree("\nVotre choix : ")
 
 		switch choix {
 		case "1":
