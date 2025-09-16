@@ -4,52 +4,117 @@ import (
 	"fmt"
 	"projet-red_Bloodrun/character"
 	"projet-red_Bloodrun/display"
+	"time"
+
+	"github.com/common-nighthawk/go-figure"
 )
 
-func main() {
-	// Initialisation du personnage
-	arthur := character.InitCharacter("Arthur", "Barbare", 1, 40, 100, 40, []string{"Coup de poing"}, []string{"Potion de vie", "Potion de vie", "Potion de vie"})
+const (
+	Reset  = "\033[0m"
+	Red    = "\033[31m"
+	Green  = "\033[32m"
+	Yellow = "\033[33m"
+	Blue   = "\033[34m"
+	Cyan   = "\033[36m"
+	Bold   = "\033[1m"
+	Gray   = "\033[90m"
+	White  = "\033[37m"
+)
 
-	// Boutique du marchand
-	shop := []display.Item{
-		{"Potion de vie", 20},
-		{"Épée en fer", 50},
-		{"Bouclier en bois", 30},
-		{"Arc basique", 40},
+func AsciText() {
+	myFigure := figure.NewColorFigure("Bloodrun", "", "red", true)
+	myFigure.Print()
+	fmt.Println(Gray + "══════════════════════════════════════════════════════════" + Reset)
+	fmt.Println(Red + Bold + "    ⚔️  Bienvenue dans l'univers sanglant de Bloodrun ⚔️" + Reset)
+	fmt.Println(Gray + "══════════════════════════════════════════════════════════" + Reset)
+	fmt.Println()
+	time.Sleep(800 * time.Millisecond)
+}
+
+func afficherSeparateur() {
+	fmt.Println(Blue + "══════════════════════════════════════════════════════════" + Reset)
+}
+
+func afficherEnTete() {
+	afficherSeparateur()
+	fmt.Println(Blue + Bold + "║" + Reset + Yellow + Bold + "                 🎮  MENU PRINCIPAL  🎮          " + Reset + Blue + Bold + "       ║" + Reset)
+	afficherSeparateur()
+}
+
+func afficherOption(numero int, texte string, icone string) {
+	fmt.Printf(Blue+Bold+"║"+Reset+" %s%s%d.%s %s %s%-25s%s %s%s\n",
+		Gray, Bold, numero, Reset, icone, Green+Bold, texte, Reset, Blue+Bold, "                       ║")
+}
+
+func loadingAnimation(msg string) {
+	fmt.Print(Cyan + Bold + msg + Reset)
+	for i := 0; i < 3; i++ {
+		time.Sleep(500 * time.Millisecond)
+		fmt.Print(".")
 	}
+	fmt.Println()
+}
 
-	// Boucle de jeu principale
+func Menu(j *character.Character) {
 	quitter := false
 	for !quitter {
-		fmt.Println("\n=== MENU ===")
-		fmt.Println("1. Afficher infos personnage")
-		fmt.Println("2. Accéder à l'inventaire")
-		fmt.Println("3. Marchand")
-		fmt.Println("4. Quitter")
+		afficherEnTete()
+		afficherOption(1, "Afficher les infos", "🧙")
+		afficherOption(2, "Accéder à l'inventaire", "🎒")
+		afficherOption(3, "Quitter le jeu", "🚪")
+		afficherSeparateur()
 
-		choix := display.LireEntree("Votre choix : ")
+		choix := display.LireEntree("\n" + Gray + "👉 Votre choix [" + Cyan + "1-3" + Gray + "] : " + Reset)
 
 		switch choix {
 		case "1":
-			display.DisplayInfo(arthur)
+			loadingAnimation("Chargement des infos")
+			fmt.Println(Yellow + Bold + ">> " + Reset + "Infos du personnage :")
+			fmt.Printf("🧝 Nom : %s\n", j.Name)
+			fmt.Printf("⚔️ Classe : %s | 🎚️ Niveau : %d\n", j.Class, j.Level)
+			fmt.Printf("❤️ PV : %d/%d\n", j.Pv, j.Pvmax)
 		case "2":
-			display.AccessInventory(&arthur)
+			loadingAnimation("Ouverture de l'inventaire")
+			fmt.Println(Cyan + Bold + ">> " + Reset + "Inventaire :")
+			if len(j.Inventory) == 0 {
+				fmt.Println(Gray + "Inventaire vide... 🎒" + Reset)
+			} else {
+				for i, item := range j.Inventory {
+					fmt.Printf("  %d. %s\n", i+1, item)
+				}
+			}
 		case "3":
-			display.Marchand(&arthur, shop)
-		case "4":
-			fmt.Println("Au revoir !")
+			fmt.Println(Red + Bold + ">> " + Reset + "Merci d'avoir joué à Bloodrun ! 💀")
 			quitter = true
 		default:
-			fmt.Println("Choix invalide !")
+			fmt.Println(Red + Bold + ">> " + Reset + "Choix invalide ❌")
 		}
+		time.Sleep(500 * time.Millisecond)
 	}
 }
 
-func isDead(j character.Character) {
+func isDead(j *character.Character) {
 	if j.Pv <= 0 {
-		fmt.Printf("%s est mort...\n", j.Name)
+		fmt.Printf("%s est mort... 💀\n", j.Name)
 		// Résurrection avec 50% des PV max
 		j.Pv = j.Pvmax / 2
-		fmt.Printf("%s est ressuscité avec %d/%d PV !\n", j.Name, j.Pv, j.Pvmax)
+		fmt.Printf("%s est ressuscité avec %d/%d PV ! ✨\n", j.Name, j.Pv, j.Pvmax)
 	}
+}
+
+func main() {
+	AsciText()
+
+	arthur := character.InitCharacter(
+		"Arthur",
+		"Barbare",
+		1,
+		40,
+		100,
+		40,
+		[]string{"Potion de vie", "Épée rouillée"},
+		[]string{}, // compétences
+	)
+
+	Menu(&arthur)
 }
