@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"projet-red_Bloodrun/character"
 	"projet-red_Bloodrun/display"
 	"time"
@@ -21,14 +23,22 @@ const (
 	White  = "\033[37m"
 )
 
-func AsciText() {
+func AsciAccueil() {
+	// Gros titre en ASCII rouge
 	myFigure := figure.NewColorFigure("Bloodrun", "", "red", true)
 	myFigure.Print()
+
+	// Fond ASCII décoratif
 	fmt.Println(Gray + "══════════════════════════════════════════════════════════" + Reset)
-	fmt.Println(Red + Bold + "    ⚔️  Bienvenue dans l'univers sanglant de Bloodrun ⚔️" + Reset)
+	fmt.Println(Red + Bold + "       ⚔️⚔️⚔️   LE SANG APPELLE LE SANG   ⚔️⚔️⚔️" + Reset)
 	fmt.Println(Gray + "══════════════════════════════════════════════════════════" + Reset)
 	fmt.Println()
-	time.Sleep(800 * time.Millisecond)
+
+	// Message pour entrer
+	fmt.Println(Yellow + Bold + ">>> Appuyez sur [Entrée] pour commencer l’aventure..." + Reset)
+
+	// Attente touche entrée
+	bufio.NewReader(os.Stdin).ReadBytes('\n')
 }
 
 func afficherSeparateur() {
@@ -156,7 +166,7 @@ func isDead(j *character.Character) {
 }
 
 func main() {
-	AsciText()
+	AsciAccueil()
 
 	player := character.CharacterCreation()
 
