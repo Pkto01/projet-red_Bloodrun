@@ -137,6 +137,9 @@ func Menu(j *character.Character) {
 			loadingAnimation("Arrivée chez le Marchand")
 			display.Marchand(j, shopitem(j.Class))
 		case "4":
+			loadingAnimation("Arrivée chez le Forgeron")
+			display.Forgeron(j)
+		case "5":
 			fmt.Println(Red + Bold + ">> " + Reset + "Merci d'avoir joué à Bloodrun ! 💀")
 			quitter = true
 		default:
