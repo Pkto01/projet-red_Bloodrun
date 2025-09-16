@@ -12,9 +12,23 @@ type Item struct {
 }
 
 // --- Fonctions Inventaire ---
+func getInventoryLimit(class string) int {
+	switch class {
+	case "Caster":
+		return 7
+	case "Slayer":
+		return 11
+	case "Bastion":
+		return 15
+	default:
+		return 5
+	}
+}
+
 func addInventory(j *character.Character, item Item) {
-	if len(j.Inventory) >= 10 {
-		fmt.Println("Inventaire plein ! Impossible d'ajouter :", item)
+	limit := getInventoryLimit(j.Class)
+	if len(j.Inventory) >= limit {
+		fmt.Println("Inventaire plein ! Impossible d'ajouter :", item.Nom)
 		return
 	}
 	j.Inventory = append(j.Inventory, item.Nom)
