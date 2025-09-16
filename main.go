@@ -114,18 +114,9 @@ func isDead(j *character.Character) {
 func main() {
 	AsciText()
 
-	arthur := character.InitCharacter(
-		"Arthur",
-		"Barbare",
-		1,
-		40,
-		100,
-		40,
-		[]string{"Potion de vie", "Épée rouillée"},
-		[]string{}, // compétences
-	)
+	player := character.CharacterCreation()
 
-	Menu(&arthur)
+	Menu(&player)
 
 	skills := []string{"Soin", "Téléportation"}
 
