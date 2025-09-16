@@ -98,7 +98,7 @@ func Forgeron(j *character.Character) {
 			// Vérifie limite d’inventaire avant ajout
 			addInventory(j, Item{Nom: equipements[num-1], Prix: 5})
 		} else {
-			fmt.Println("Pas assez d’argent pour fabriquer cet équipement !")
+			fmt.Println("Pas assez d'argent pour fabriquer cet équipement !")
 		}
 	}
 }
