@@ -111,7 +111,7 @@ func Menu(j *character.Character) {
 		afficherOption(1, "Afficher les infos", "🧙")
 		afficherOption(2, "Accéder à l'inventaire", "🎒")
 		afficherOption(3, "Accéder au Marchant", "🛒")
-		afficherOption(4, "Accéder au Forgeron", "⚒️")
+		afficherOption(4, "Accéder au Forgeron", "⚒️ ")
 		afficherOption(5, "Quitter le jeu", "🚪")
 		afficherSeparateur()
 
