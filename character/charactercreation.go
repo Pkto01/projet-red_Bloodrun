@@ -130,7 +130,7 @@ func CharacterCreation() Character {
 		formattedName,
 		className,                 // Classe choisie
 		1,                         // Niveau 1
-		50,                        // Argent de départ
+		10000000,                  // Argent de départ
 		pvMax,                     // PV max basés sur la classe
 		pvCurrent,                 // PV actuels (50%)
 		[]string{"Coup de Poing"}, // Compétence de base
