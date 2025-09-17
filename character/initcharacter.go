@@ -10,5 +10,10 @@ func InitCharacter(Name string, Class string, Level int, Money int, Pvmax int, P
 		Pv:        Pv,
 		skills:    skills,
 		Inventory: Inventory,
+		Equipped: Equipment{
+			Weapon:    "Aucune",
+			Armor:     "Aucune",
+			Accessory: "Aucune",
+		},
 	}
 }
