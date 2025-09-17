@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 	"unicode"
+	"unicode/utf8"
 )
 
 // isAlpha vérifie si une chaîne de caractères ne contient que des lettres.
@@ -39,12 +40,18 @@ func afficherSeparateur() {
 
 func afficherTitre(titre string) {
 	afficherSeparateur()
-	// La logique ici pour construire les bordures avec des caractères.
-	// Pour un affichage précis comme l'image, il faudrait une bibliothèque graphique ou terminale avancée.
-	// Dans un terminal texte pur, on ne peut que simuler.
-	fmt.Printf("%s%s %s %s%s\n", Blue+Bold, "╔", strings.Repeat("═", len(titre)+4), Bold, "╗")
-	fmt.Printf("%s %s%s%s %s%s\n", Blue+Bold, "║", Cyan+Bold, titre, strings.Repeat(" ", len(titre)+1), Blue+Bold+"║")
-	fmt.Printf("%s%s %s %s%s\n", Blue+Bold, "╚", strings.Repeat("═", len(titre)+4), Bold, "╝")
+
+	// On calcule la largeur visuelle en comptant les runes, pas les bytes.
+	contentWidth := utf8.RuneCountInString(titre) + 4
+
+	// Ligne supérieure de la boîte
+	fmt.Printf("%s╔%s╗%s\n", Blue+Bold, strings.Repeat("═", contentWidth), Reset)
+
+	// Ligne du milieu avec le titre
+	fmt.Printf("%s║  %s%s%s  ║%s\n", Blue+Bold, Cyan+Bold, titre, Blue+Bold, Reset)
+
+	// Ligne inférieure de la boîte
+	fmt.Printf("%s╚%s╝%s\n", Blue+Bold, strings.Repeat("═", contentWidth), Reset)
 }
 
 func afficherOption(numero int, texte string, details string) {
