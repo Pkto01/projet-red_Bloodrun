@@ -14,13 +14,13 @@ var itemTypes = map[string]string{
 	"Marteau Lourd":      "Weapon",
 
 	// Armures
-	"Robe de Mage":      "Armor",
-	"Armure de Plaques": "Armor",
+	"Robe de Mage":       "Armor",
+	"Armure de Plaques":  "Armor",
+	"Bottes de Célérité": "Armor",
 
 	// Accessoires
 	"Bouclier en Acier":   "Accessory",
 	"Grimoire des Ombres": "Accessory",
-	"Bottes de Célérité":  "Accessory",
 	"Gantelets de Force":  "Accessory",
 }
 
