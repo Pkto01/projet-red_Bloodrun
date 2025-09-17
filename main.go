@@ -143,10 +143,10 @@ func Menu(j *character.Character) {
 			}
 		case "3":
 			loadingAnimation("Arrivée chez le Marchand")
-			display.Marchand(j, shopitem(j.Class))
+			display.Marchand(j, shopitem())
 		case "4":
 			loadingAnimation("Arrivée chez le Forgeron")
-			display.Forgeron(j)
+			display.Forgeron(j, forgeitem(j.Class))
 		case "5":
 			fmt.Println(Red + Bold + ">> " + Reset + "Merci d'avoir joué à Bloodrun ! 💀")
 			quitter = true
@@ -167,19 +167,9 @@ func isDead(j *character.Character) {
 }
 
 func main() {
-	AsciText()
+	AsciAccueil()
 
 	player := character.CharacterCreation()
 
 	Menu(&player)
-
-	skills := []string{"Soin", "Téléportation"}
-
-	// Ajouter "Boule de feu"
-	skills = spellBook(skills, "Boule de feu")
-	fmt.Println(skills)
-
-	// Essayer de l'ajouter à nouveau
-	skills = spellBook(skills, "Boule de feu")
-	fmt.Println(skills)
 }
