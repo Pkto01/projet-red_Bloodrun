@@ -9,6 +9,7 @@ import (
 	"github.com/common-nighthawk/go-figure"
 )
 
+// ... (constantes de couleur, AsciText, etc. ne changent pas) ...
 const (
 	Reset  = "\033[0m"
 	Red    = "\033[31m"
@@ -64,43 +65,44 @@ func spellBook(skills []string, newSpell string) []string {
 	return append(skills, newSpell) // sinon on l'ajoute
 }
 
-func shopitem(class string) []display.Item {
-	// Objet commun à tous les magasins
-	potionDeVie := display.Item{Nom: "Potion de vie", Prix: 20}
-
+// forgeitem définit maintenant les RECETTES de fabrication pour chaque classe.
+func forgeitem(class string) []display.CraftableItem {
 	switch class {
 	case "Doom Slayer":
-		fmt.Println(Yellow + "Le forgeron vous montre ses lames les plus affûtées." + Reset)
-		return []display.Item{
-			potionDeVie,
-			{Nom: "Hache de Berserker", Prix: 150},
-			{Nom: "Bottes de Célérité", Prix: 70},
-			{Nom: "Gantelets de Force", Prix: 85},
+		return []display.CraftableItem{
+			{Nom: "Hache de Berserker", Prix: 150, Requis: map[string]int{"Acier Noirci": 4, "Fragments de Sang": 3}},
+			{Nom: "Bottes de Célérité", Prix: 70, Requis: map[string]int{"Étoffe Sanglante": 3, "Os Fêlés": 2}},
+			{Nom: "Gantelets de Force", Prix: 85, Requis: map[string]int{"Acier Noirci": 2, "Os Fêlés": 5}},
 		}
 	case "Doom Caster":
-		fmt.Println(Yellow + "L'enchanteur étale ses parchemins et artefacts mystiques." + Reset)
-		return []display.Item{
-			potionDeVie,
-			{Nom: "Bâton d'Apprenti", Prix: 70},
-			{Nom: "Robe de Mage", Prix: 60},
-			{Nom: "Grimoire des Ombres", Prix: 200},
+		return []display.CraftableItem{
+			{Nom: "Bâton d'Apprenti", Prix: 70, Requis: map[string]int{"Os Fêlés": 8, "Fragments de Sang": 1}},
+			{Nom: "Robe de Mage", Prix: 60, Requis: map[string]int{"Étoffe Sanglante": 5}},
+			{Nom: "Grimoire des Ombres", Prix: 200, Requis: map[string]int{"Étoffe Sanglante": 4, "Fragments de Sang": 5}},
 		}
 	case "Doom Bastion":
-		fmt.Println(Yellow + "L'armurier présente ses pièces les plus robustes." + Reset)
-		return []display.Item{
-			potionDeVie,
-			{Nom: "Marteau Lourd", Prix: 90},
-			{Nom: "Bouclier en Acier", Prix: 120},
-			{Nom: "Armure de Plaques", Prix: 180},
+		return []display.CraftableItem{
+			{Nom: "Marteau Lourd", Prix: 90, Requis: map[string]int{"Acier Noirci": 3, "Os Fêlés": 3}},
+			{Nom: "Bouclier en Acier", Prix: 120, Requis: map[string]int{"Acier Noirci": 5}},
+			{Nom: "Armure de Plaques", Prix: 180, Requis: map[string]int{"Acier Noirci": 8, "Étoffe Sanglante": 3}},
 		}
 	default:
-		// Un magasin par défaut si la classe n'est pas reconnue
-		fmt.Println(Yellow + "Le marchand vous propose ses articles de base." + Reset)
-		return []display.Item{
-			potionDeVie,
-			{Nom: "Dague Rouillée", Prix: 25},
-			{Nom: "Tunique en Cuir", Prix: 30},
+		// Recettes de base si la classe n'est pas reconnue
+		return []display.CraftableItem{
+			{Nom: "Dague Rouillée", Prix: 25, Requis: map[string]int{"Acier Noirci": 1, "Os Fêlés": 1}},
+			{Nom: "Tunique en Cuir", Prix: 30, Requis: map[string]int{"Étoffe Sanglante": 2}},
 		}
+	}
+}
+
+// shopitem définit ce que le MARCHAND vend (potions et matériaux de fabrication).
+func shopitem() []display.Item {
+	return []display.Item{
+		{Nom: "Potion de vie", Prix: 20},
+		{Nom: "Fragments de Sang", Prix: 50},
+		{Nom: "Os Fêlés", Prix: 35},
+		{Nom: "Acier Noirci", Prix: 100},
+		{Nom: "Étoffe Sanglante", Prix: 60},
 	}
 }
 
@@ -111,42 +113,34 @@ func Menu(j *character.Character) {
 		afficherOption(1, "Afficher les infos", "🧙")
 		afficherOption(2, "Accéder à l'inventaire", "🎒")
 		afficherOption(3, "Accéder au Marchant", "🛒")
-		afficherOption(4, "Accéder au Forgeron", "⚒️ ")
+		afficherOption(4, "Accéder au Forgeron", "⚒️")
 		afficherOption(5, "Quitter le jeu", "🚪")
 		afficherSeparateur()
 
-		choix := display.LireEntree("\n" + Gray + "👉 Votre choix [" + Cyan + "1-3" + Gray + "] : " + Reset)
+		choix := display.LireEntree("\n" + Gray + "👉 Votre choix [" + Cyan + "1-5" + Gray + "] : " + Reset)
 
 		switch choix {
 		case "1":
 			loadingAnimation("Chargement des infos")
-			fmt.Println(Yellow + Bold + ">> " + Reset + "Infos du personnage :")
-			fmt.Printf("🧝 Nom : %s\n", j.Name)
-			fmt.Printf("⚔️ Classe : %s | 🎚️ Niveau : %d\n", j.Class, j.Level)
-			fmt.Printf("❤️ PV : %d/%d\n", j.Pv, j.Pvmax)
+			display.DisplayInfo(*j)
 		case "2":
 			loadingAnimation("Ouverture de l'inventaire")
-			fmt.Println(Cyan + Bold + ">> " + Reset + "Inventaire :")
-			if len(j.Inventory) == 0 {
-				fmt.Println(Gray + "Inventaire vide... 🎒" + Reset)
-			} else {
-				for i, item := range j.Inventory {
-					fmt.Printf("  %d. %s\n", i+1, item)
-				}
-			}
+			display.AccessInventory(j)
 		case "3":
 			loadingAnimation("Arrivée chez le Marchand")
-			display.Marchand(j, shopitem(j.Class))
+			display.Marchand(j, shopitem())
 		case "4":
 			loadingAnimation("Arrivée chez le Forgeron")
-			display.Forgeron(j)
+			display.Forgeron(j, forgeitem(j.Class))
 		case "5":
 			fmt.Println(Red + Bold + ">> " + Reset + "Merci d'avoir joué à Bloodrun ! 💀")
 			quitter = true
 		default:
 			fmt.Println(Red + Bold + ">> " + Reset + "Choix invalide ❌")
 		}
-		time.Sleep(500 * time.Millisecond)
+		if !quitter {
+			display.LireEntree("\nAppuyez sur Entrée pour continuer...")
+		}
 	}
 }
 
@@ -161,18 +155,9 @@ func isDead(j *character.Character) {
 
 func main() {
 	AsciText()
-
 	player := character.CharacterCreation()
-
+	// Ajout de quelques matériaux de départ pour tester
+	player.Inventory = append(player.Inventory, "Os Fêlés", "Os Fêlés", "Fragments de Sang")
+	fmt.Println(Yellow + "Vous trouvez quelques matériaux en commençant votre aventure." + Reset)
 	Menu(&player)
-
-	skills := []string{"Soin", "Téléportation"}
-
-	// Ajouter "Boule de feu"
-	skills = spellBook(skills, "Boule de feu")
-	fmt.Println(skills)
-
-	// Essayer de l'ajouter à nouveau
-	skills = spellBook(skills, "Boule de feu")
-	fmt.Println(skills)
 }
