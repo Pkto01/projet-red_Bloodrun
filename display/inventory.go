@@ -93,6 +93,7 @@ func AccessInventory(j *character.Character) {
 	quitter := false
 	for !quitter {
 		fmt.Println("\n--- Inventaire & Équipement ---")
+		fmt.Printf("%s\n", ShowInventory(j))
 		// Affiche l'équipement actuel
 		fmt.Println("\033[1mÉquipé :\033[0m")
 		fmt.Printf("   Arme      : %s\n", j.Equipped.Weapon) // Assurez-vous d'utiliser "Equipped" si vous avez suivi ma correction précédente
@@ -154,6 +155,21 @@ func AccessInventory(j *character.Character) {
 			LireEntree("\nAppuyez sur Entrée pour continuer...")
 		}
 	}
+}
+
+func ShowInventory(j *character.Character) string {
+	limit := getInventoryLimit(j.Class, j.InventoryUpgrades)
+	result := fmt.Sprintf("\033[34mInventaire (%d/%d)\033[0m\n", len(j.Inventory), limit)
+
+	if len(j.Inventory) == 0 {
+		result += " - (vide)\n"
+		return result
+	}
+
+	for i, item := range j.Inventory {
+		result += fmt.Sprintf(" %d. %s\n", i+1, item)
+	}
+	return result
 }
 
 // takePot - Utilisation d'une potion (INCHANGÉ)
