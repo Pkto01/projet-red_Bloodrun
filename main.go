@@ -167,6 +167,8 @@ func isDead(j *character.Character) {
 }
 
 func main() {
+	// character.Boss()
+
 	AsciAccueil()
 
 	player := character.CharacterCreation()
