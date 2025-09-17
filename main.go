@@ -76,22 +76,19 @@ func forgeitem(class string) []display.CraftableItem {
 		}
 	case "Doom Caster":
 		return []display.CraftableItem{
-			{Nom: "Bâton d'Apprenti", Prix: 70, Requis: map[string]int{"Os Fêlés": 8, "Fragments de Sang": 1}},
+			{Nom: "Bâton d'Apprenti", Prix: 70, Requis: map[string]int{"Os Fêlés": 4, "Fragments de Sang": 1}},
 			{Nom: "Robe de Mage", Prix: 60, Requis: map[string]int{"Étoffe Sanglante": 5}},
-			{Nom: "Grimoire des Ombres", Prix: 200, Requis: map[string]int{"Étoffe Sanglante": 4, "Fragments de Sang": 5}},
+			{Nom: "Grimoire des Ombres", Prix: 200, Requis: map[string]int{"Étoffe Sanglante": 2, "Fragments de Sang": 3}},
 		}
 	case "Doom Bastion":
 		return []display.CraftableItem{
 			{Nom: "Marteau Lourd", Prix: 90, Requis: map[string]int{"Acier Noirci": 3, "Os Fêlés": 3}},
-			{Nom: "Bouclier en Acier", Prix: 120, Requis: map[string]int{"Acier Noirci": 5}},
-			{Nom: "Armure de Plaques", Prix: 180, Requis: map[string]int{"Acier Noirci": 8, "Étoffe Sanglante": 3}},
+			{Nom: "Bouclier en Acier", Prix: 120, Requis: map[string]int{"Acier Noirci": 7}},
+			{Nom: "Armure de Plaques", Prix: 180, Requis: map[string]int{"Acier Noirci": 5, "Étoffe Sanglante": 3}},
 		}
 	default:
 		// Recettes de base si la classe n'est pas reconnue
-		return []display.CraftableItem{
-			{Nom: "Dague Rouillée", Prix: 25, Requis: map[string]int{"Acier Noirci": 1, "Os Fêlés": 1}},
-			{Nom: "Tunique en Cuir", Prix: 30, Requis: map[string]int{"Étoffe Sanglante": 2}},
-		}
+		return []display.CraftableItem{}
 	}
 }
 
@@ -99,7 +96,6 @@ func forgeitem(class string) []display.CraftableItem {
 func shopitem() []display.Item {
 	return []display.Item{
 		{Nom: "Potion de vie", Prix: 20},
-		{Nom: "Fragments de Sang", Prix: 50},
 		{Nom: "Os Fêlés", Prix: 35},
 		{Nom: "Acier Noirci", Prix: 100},
 		{Nom: "Étoffe Sanglante", Prix: 60},
@@ -155,9 +151,8 @@ func isDead(j *character.Character) {
 
 func main() {
 	AsciText()
+
 	player := character.CharacterCreation()
-	// Ajout de quelques matériaux de départ pour tester
-	player.Inventory = append(player.Inventory, "Os Fêlés", "Os Fêlés", "Fragments de Sang")
-	fmt.Println(Yellow + "Vous trouvez quelques matériaux en commençant votre aventure." + Reset)
+
 	Menu(&player)
 }
