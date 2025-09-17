@@ -74,43 +74,40 @@ func spellBook(skills []string, newSpell string) []string {
 	return append(skills, newSpell) // sinon on l'ajoute
 }
 
-func shopitem(class string) []display.Item {
-	// Objet commun à tous les magasins
-	potionDeVie := display.Item{Nom: "Potion de vie", Prix: 20}
-
+// forgeitem définit maintenant les RECETTES de fabrication pour chaque classe.
+func forgeitem(class string) []display.CraftableItem {
 	switch class {
 	case "Doom Slayer":
-		fmt.Println(Yellow + "Le forgeron vous montre ses lames les plus affûtées." + Reset)
-		return []display.Item{
-			potionDeVie,
-			{Nom: "Hache de Berserker", Prix: 150},
-			{Nom: "Bottes de Célérité", Prix: 70},
-			{Nom: "Gantelets de Force", Prix: 85},
+		return []display.CraftableItem{
+			{Nom: "Hache de Berserker", Prix: 150, Requis: map[string]int{"Acier Noirci": 4, "Fragments de Sang": 3}},
+			{Nom: "Bottes de Célérité", Prix: 70, Requis: map[string]int{"Étoffe Sanglante": 3, "Os Fêlés": 2}},
+			{Nom: "Gantelets de Force", Prix: 85, Requis: map[string]int{"Acier Noirci": 2, "Os Fêlés": 5}},
 		}
 	case "Doom Caster":
-		fmt.Println(Yellow + "L'enchanteur étale ses parchemins et artefacts mystiques." + Reset)
-		return []display.Item{
-			potionDeVie,
-			{Nom: "Bâton d'Apprenti", Prix: 70},
-			{Nom: "Robe de Mage", Prix: 60},
-			{Nom: "Grimoire des Ombres", Prix: 200},
+		return []display.CraftableItem{
+			{Nom: "Bâton d'Apprenti", Prix: 70, Requis: map[string]int{"Os Fêlés": 4, "Fragments de Sang": 1}},
+			{Nom: "Robe de Mage", Prix: 60, Requis: map[string]int{"Étoffe Sanglante": 5}},
+			{Nom: "Grimoire des Ombres", Prix: 200, Requis: map[string]int{"Étoffe Sanglante": 2, "Fragments de Sang": 3}},
 		}
 	case "Doom Bastion":
-		fmt.Println(Yellow + "L'armurier présente ses pièces les plus robustes." + Reset)
-		return []display.Item{
-			potionDeVie,
-			{Nom: "Marteau Lourd", Prix: 90},
-			{Nom: "Bouclier en Acier", Prix: 120},
-			{Nom: "Armure de Plaques", Prix: 180},
+		return []display.CraftableItem{
+			{Nom: "Marteau Lourd", Prix: 90, Requis: map[string]int{"Acier Noirci": 3, "Os Fêlés": 3}},
+			{Nom: "Bouclier en Acier", Prix: 120, Requis: map[string]int{"Acier Noirci": 7}},
+			{Nom: "Armure de Plaques", Prix: 180, Requis: map[string]int{"Acier Noirci": 5, "Étoffe Sanglante": 3}},
 		}
 	default:
-		// Un magasin par défaut si la classe n'est pas reconnue
-		fmt.Println(Yellow + "Le marchand vous propose ses articles de base." + Reset)
-		return []display.Item{
-			potionDeVie,
-			{Nom: "Dague Rouillée", Prix: 25},
-			{Nom: "Tunique en Cuir", Prix: 30},
-		}
+		// Recettes de base si la classe n'est pas reconnue
+		return []display.CraftableItem{}
+	}
+}
+
+// shopitem définit ce que le MARCHAND vend (potions et matériaux de fabrication).
+func shopitem() []display.Item {
+	return []display.Item{
+		{Nom: "Potion de vie", Prix: 20},
+		{Nom: "Os Fêlés", Prix: 35},
+		{Nom: "Acier Noirci", Prix: 100},
+		{Nom: "Étoffe Sanglante", Prix: 60},
 	}
 }
 
@@ -170,7 +167,7 @@ func isDead(j *character.Character) {
 }
 
 func main() {
-	AsciAccueil()
+	AsciText()
 
 	player := character.CharacterCreation()
 
