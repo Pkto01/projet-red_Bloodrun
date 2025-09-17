@@ -55,26 +55,38 @@ func removeItems(inventory []string, itemName string, quantity int) []string {
 	return newInventory
 }
 
-func getInventoryLimit(class string) int {
+func getInventoryLimit(class string, upgrades int) int {
+	base := 0
 	switch class {
 	case "Doom Caster":
-		return 7
+		base = 7
 	case "Doom Slayer":
-		return 11
+		base = 11
 	case "Doom Bastion":
-		return 15
+		base = 15
 	default:
-		return 10
+		base = 10
 	}
+	return base + (upgrades * 10)
+}
+
+func upgradeInventorySlot(j *character.Character) {
+	if j.InventoryUpgrades >= 3 {
+		fmt.Println("\033[31mVous avez déjà atteint la limite d'augmentations d'inventaire (3 fois)!\033[0m")
+		return
+	}
+	j.InventoryUpgrades++
+	fmt.Println("\033[32mVotre capacité d'inventaire a été augmentée de +10 !\033[0m")
 }
 
 func addInventory(j *character.Character, itemName string) {
-	limit := getInventoryLimit(j.Class)
+	limit := getInventoryLimit(j.Class, j.InventoryUpgrades)
 	if len(j.Inventory) >= limit {
 		fmt.Println("\033[31mInventaire plein ! Impossible d'ajouter : " + itemName + "\033[0m")
 		return
 	}
 	j.Inventory = append(j.Inventory, itemName)
+
 }
 
 // getItemSalePrice retourne le prix de vente d'un objet (50% du prix de base).
@@ -162,7 +174,8 @@ func Marchand(j *character.Character, shop []Item) {
 		for i, item := range shop {
 			fmt.Printf("%d. %s (%d pièces)\n", i+1, item.Nom, item.Prix)
 		}
-		fmt.Printf("%d. Vendre un objet\n", len(shop)+1)
+		fmt.Printf("%d. Augmentation d'inventaire", len(shop)+1)
+		fmt.Printf("%d. Vendre un objet\n", len(shop)+2)
 		fmt.Println("0. Retour")
 
 		choixStr := LireEntree("Votre choix : ")
@@ -176,7 +189,12 @@ func Marchand(j *character.Character, shop []Item) {
 			return
 		}
 
-		if choix == len(shop)+1 { // Si l'utilisateur choisit l'option "Vendre"
+		if choix == len(shop)+1 {
+			upgradeInventorySlot(j)
+			continue
+		}
+
+		if choix == len(shop)+2 { // Si l'utilisateur choisit l'option "Vendre"
 			sellItem(j)
 			continue // Revient au menu du marchand après la vente
 		}
@@ -194,6 +212,22 @@ func Marchand(j *character.Character, shop []Item) {
 		} else {
 			fmt.Println("Choix invalide.")
 		}
+
+		if choix > 0 && choix <= len(shop) {
+			item := shop[choix-1]
+			if j.Money >= item.Prix {
+				j.Money -= item.Prix
+				if item.Nom == "Augmentation d'inventaire" {
+					upgradeInventorySlot(j)
+				} else {
+					addInventory(j, item.Nom)
+				}
+				fmt.Printf("\033[32m>> Vous avez acheté : %s\033[0m\n", item.Nom)
+			} else {
+				fmt.Printf("\033[31mPas assez d'argent !\033[0m")
+			}
+		}
+
 	}
 }
 

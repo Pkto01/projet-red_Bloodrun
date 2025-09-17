@@ -110,7 +110,6 @@ func shopitem() []display.Item {
 		{Nom: "Étoffe Sanglante", Prix: 60},
 	}
 }
-
 func Menu(j *character.Character) {
 	quitter := false
 	for !quitter {
