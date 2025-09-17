@@ -23,7 +23,7 @@ type CraftableItem struct {
 // --- Fonctions d'aide à l'inventaire ---
 
 // removeFromSliceByIndex retire un élément d'une tranche à un index donné.
-func removeFromSliceByIndex(slice []string, index int) []string {
+func RemoveFromSliceByIndex(slice []string, index int) []string {
 	if index < 0 || index >= len(slice) {
 		return slice // Ne fait rien si l'index est invalide
 	}
@@ -142,7 +142,7 @@ func sellItem(j *character.Character) {
 
 		// Met à jour l'argent et l'inventaire
 		j.Money += salePrice
-		j.Inventory = removeFromSliceByIndex(j.Inventory, itemIndex)
+		j.Inventory = RemoveFromSliceByIndex(j.Inventory, itemIndex)
 
 		fmt.Printf("\033[32mVous avez vendu %s pour %d pièces.\033[0m\n", itemToSell, salePrice)
 

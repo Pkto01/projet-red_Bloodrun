@@ -122,7 +122,7 @@ func Menu(j *character.Character) {
 		afficherOption(5, "Quitter le jeu", "🚪")
 		afficherSeparateur()
 
-		choix := display.LireEntree("\n" + Gray + "👉 Votre choix [" + Cyan + "1-3" + Gray + "] : " + Reset)
+		choix := display.LireEntree("\n" + Gray + "👉 Votre choix [" + Cyan + "1-5" + Gray + "] : " + Reset)
 
 		switch choix {
 		case "1":
@@ -133,14 +133,7 @@ func Menu(j *character.Character) {
 			fmt.Printf("❤️ PV : %d/%d\n", j.Pv, j.Pvmax)
 		case "2":
 			loadingAnimation("Ouverture de l'inventaire")
-			fmt.Println(Cyan + Bold + ">> " + Reset + "Inventaire :")
-			if len(j.Inventory) == 0 {
-				fmt.Println(Gray + "Inventaire vide... 🎒" + Reset)
-			} else {
-				for i, item := range j.Inventory {
-					fmt.Printf("  %d. %s\n", i+1, item)
-				}
-			}
+			display.AccessInventory(j)
 		case "3":
 			loadingAnimation("Arrivée chez le Marchand")
 			display.Marchand(j, shopitem())

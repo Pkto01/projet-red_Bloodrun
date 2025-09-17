@@ -1,5 +1,11 @@
 package character
 
+type Equipment struct {
+	Weapon    string
+	Armor     string
+	Accessory string
+}
+
 type Character struct {
 	Name      string
 	Class     string
@@ -9,4 +15,5 @@ type Character struct {
 	Pv        int
 	skills    []string
 	Inventory []string
+	Equipped  Equipment
 }
