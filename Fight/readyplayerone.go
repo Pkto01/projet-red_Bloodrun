@@ -2,38 +2,80 @@ package fight
 
 import (
 	"fmt"
+	"math/rand"
 	"projet-red_Bloodrun/character"
+	"projet-red_Bloodrun/display"
 	"time"
 )
 
-// combatLoop est la boucle de base pour tous les combats.
-// Elle gère le déroulement des tours et appelle une fonction pour l'action du monstre.
-func combatLoop(player *character.Character, adversary *Monster, monsterAction func(turn int, m *Monster, p *character.Character)) {
-	// Affiche l'art du monstre avant le début du combat
-	DisplayMonsterArt(adversary.Name)
+func playerTurn(player *character.Character, adversary *Monster) (combatOver bool) {
+	turnOver := false
+	for !turnOver {
+		fmt.Println("\n--- C'est votre tour ---")
+		fmt.Println("1. Attaquer")
+		fmt.Println("2. Inventaire")
+		fmt.Println("3. Fuir")
+		choix := display.LireEntree("Votre choix : ")
 
+		switch choix {
+		case "1": // ATTAQUER
+			playerDamage := player.Attack - adversary.Defense
+			if playerDamage < 1 {
+				playerDamage = 1 // Toujours infliger au moins 1 de dégât
+			}
+			adversary.Pv -= playerDamage
+			fmt.Printf("Vous attaquez et infligez à %s %d de dégâts.\n", adversary.Name, playerDamage)
+			turnOver = true // Attaquer termine le tour
+
+		case "2": // INVENTAIRE
+			display.AccessInventory(player)
+			// Après avoir utilisé l'inventaire (ex: une potion), le joueur peut encore agir.
+			// On ne met PAS turnOver à true, la boucle du menu se relance.
+
+		case "3": // FUIR
+			fmt.Println("Vous essayez de prendre la fuite...")
+			time.Sleep(1 * time.Second)
+
+			// Chance de fuite de 50%
+			if rand.Intn(2) == 0 {
+				fmt.Println("Vous avez réussi à fuir !")
+				return true // Signale que le combat est terminé
+			} else {
+				fmt.Println("Votre tentative de fuite a échoué ! Le monstre vous attaque.")
+				turnOver = true // La tentative de fuite ratée termine le tour
+			}
+
+		default:
+			fmt.Println("Choix invalide.")
+		}
+	}
+	return false // Le combat n'est pas terminé
+}
+
+// combatLoop est la boucle de base pour tous les combats.
+func combatLoop(player *character.Character, adversary *Monster, monsterAction func(int, *Monster, *character.Character)) {
+	DisplayMonsterArt(adversary.Name)
 	fmt.Println("\n💥💥💥 LE COMBAT COMMENCE ! 💥💥💥")
 	turn := 1
+	hasFled := false
 
 	for player.Pv > 0 && adversary.Pv > 0 {
 		fmt.Printf("\n---------- TOUR %d ----------\n", turn)
+		fmt.Printf("PV Joueur: %d/%d | PV %s: %d/%d\n", player.Pv, player.Pvmax, adversary.Name, adversary.Pv, adversary.Pvmax)
 
 		// --- Tour du Joueur ---
-		// TODO: Implémenter ici un menu pour le joueur (Attaquer, Inventaire, Compétences)
-		playerDamage := player.Attack - adversary.Defense
-		if playerDamage < 1 {
-			playerDamage = 1 // Toujours infliger au moins 1 de dégât
+		if playerTurn(player, adversary) {
+			hasFled = true
+			break // Si playerTurn retourne true, le joueur a fui, on arrête le combat.
 		}
-		adversary.Pv -= playerDamage
-		fmt.Printf("Vous infligez à %s %d de dégâts.\n", adversary.Name, playerDamage)
-		fmt.Printf("Points de vie de l'ennemi : %d/%d PV\n", adversary.Pv, adversary.Pvmax)
 
+		// On vérifie si le monstre est mort après le tour du joueur
 		if adversary.Pv <= 0 {
 			break
 		}
 		time.Sleep(1 * time.Second)
 
-		// --- Tour du Monstre (action spécifique définie par la fonction monsterAction) ---
+		// --- Tour du Monstre ---
 		monsterAction(turn, adversary, player)
 
 		turn++
@@ -42,11 +84,13 @@ func combatLoop(player *character.Character, adversary *Monster, monsterAction f
 
 	// --- Fin du Combat ---
 	fmt.Println("\n---------- FIN DU COMBAT ----------")
-	if player.Pv <= 0 {
+	if hasFled {
+		fmt.Println("Vous êtes retourné à l'entrée du donjon.")
+	} else if player.Pv <= 0 {
 		fmt.Println("Vous avez été vaincu... 💀")
 	} else {
 		fmt.Printf("Vous avez vaincu : %s !\n", adversary.Name)
-		// player.GainExperience(adversary.ExperienceReward) // Le joueur gagne de l'expérience
+		// player.GainExperience(adversary.ExperienceReward) // Décommentez quand vous aurez le système d'XP
 	}
 }
 
