@@ -2,20 +2,71 @@ package fight
 
 import (
 	"fmt"
+	"projet-red_Bloodrun/character"
+	"time"
 )
 
-// Fonction pour simuler le pattern de combat du gobelin
-func goblinPattern(goblinName string, targetName string, maxHP int, damagePattern []int) {
-	fmt.Printf("\n%s commence le combat contre %s.\n", goblinName, targetName)
-	currentHP := maxHP
-	for turn := 0; turn < 3; turn++ {
-		damage := damagePattern[turn]
-		currentHP -= damage
-		if currentHP < 0 {
-			currentHP = 0
+// GoblinPattern gère un combat contre un gobelin suivant un schéma d'attaque précis.
+func GoblinPattern(player *character.Character, goblin *Monster) {
+	fmt.Println("\n💥💥💥 LE COMBAT COMMENCE ! 💥💥💥")
+	turn := 1
+
+	// Le combat continue tant que les deux combattants sont en vie.
+	for player.Pv > 0 && goblin.Pv > 0 {
+		fmt.Printf("\n---------- TOUR %d ----------\n", turn)
+
+		// --- Tour du Joueur ---
+		playerDamage := player.Attack - goblin.Defense
+		if playerDamage < 0 {
+			playerDamage = 0 // On ne peut pas infliger de dégâts négatifs
 		}
-		fmt.Printf("Tour %d : %s inflige %d de dégâts à %s. Points de vie restants : %d/%d\n",
-			turn+1, goblinName, damage, targetName, currentHP, maxHP)
+		goblin.Pv -= playerDamage
+		fmt.Printf("Vous infligez à %s %d de dégâts.\n", goblin.Name, playerDamage)
+		fmt.Printf("Points de vie du Gobelin : %d/%d PV\n", goblin.Pv, goblin.Pvmax)
+
+		if goblin.Pv <= 0 {
+			break // Si le gobelin est vaincu, on sort de la boucle
+		}
+
+		time.Sleep(1 * time.Second) // Petite pause pour la lisibilité
+
+		// --- Tour du Gobelin ---
+		damageMultiplier := 1.0 // 100% par défaut
+
+		// Tous les 3 tours, le multiplicateur passe à 200%
+		if turn%3 == 0 {
+			damageMultiplier = 2.0 // 200%
+			fmt.Println("Le Gobelin concentre son énergie pour une attaque puissante !")
+		}
+
+		// Calcul des dégâts
+		baseDamage := float64(goblin.Attack) * damageMultiplier
+		inflictedDamage := int(baseDamage) - player.Defense
+		if inflictedDamage < 0 {
+			inflictedDamage = 0
+		}
+
+		// Application des dégâts au joueur
+		player.Pv -= inflictedDamage
+
+		// Affichage des informations de combat
+		fmt.Printf("%s inflige à %s %d de dégâts.\n", goblin.Name, player.Name, inflictedDamage)
+		fmt.Printf("Vos points de vie : %d/%d PV\n", player.Pv, player.Pvmax)
+
+		turn++
+		time.Sleep(1 * time.Second)
+	}
+
+	// --- Fin du Combat ---
+	fmt.Println("\n---------- FIN DU COMBAT ----------")
+	if player.Pv <= 0 {
+		fmt.Println("Vous avez été vaincu... 💀")
+		// Vous pouvez appeler votre fonction isDead ici si vous le souhaitez
+	} else {
+		fmt.Printf("Vous avez vaincu le %s !\n", goblin.Name)
+		// Ici, vous pourriez ajouter une récompense (argent, expérience, etc.)
+		player.Money += 25
+		fmt.Println("Vous gagnez 25 pièces d'or.")
 	}
 }
 
