@@ -61,6 +61,51 @@ func afficherOption(numero int, texte string, details string) {
 	fmt.Printf(Yellow+Bold+"  %d. %s"+Reset+" %s\n", numero, texte, details)
 }
 
+func (c *Character) GainExperience(amount int) {
+	// On ne fait rien si le montant est nul ou négatif
+	if amount <= 0 {
+		return
+	}
+
+	c.Experience += amount
+	fmt.Printf("Vous gagnez %d points d'expérience ! (Total : %d/%d)\n", amount, c.Experience, c.NextLevelExp)
+
+	// Boucle de level-up : permet de gagner plusieurs niveaux d'un coup
+	// si l'expérience gagnée est très importante.
+	for c.Experience >= c.NextLevelExp {
+		// 1. Calculer l'expérience excédentaire
+		excessExp := c.Experience - c.NextLevelExp
+
+		// 2. Augmenter le niveau et réinitialiser l'expérience
+		c.Level++
+		c.Experience = excessExp
+
+		// 3. Augmenter le seuil pour le prochain niveau (ex: +50%)
+		// On utilise un float64 pour la multiplication pour plus de précision.
+		newNextLevelExp := float64(c.NextLevelExp) * 1.5
+		c.NextLevelExp = int(newNextLevelExp)
+
+		// 4. Améliorer les statistiques du personnage
+		// Ce sont les récompenses concrètes du level-up !
+		c.Pvmax += 15
+		c.Attack += 3
+		c.Defense += 1
+
+		// 5. Restaurer entièrement les PV du joueur en récompense
+		c.Pv = c.Pvmax
+
+		// 6. Afficher un message de célébration
+		fmt.Println("\n✨✨✨ LEVEL UP ! ✨✨✨")
+		fmt.Printf("Vous êtes maintenant niveau %d !\n", c.Level)
+		fmt.Printf("  - PV Max  : +15 (Total: %d)\n", c.Pvmax)
+		fmt.Printf("  - Attaque : +3  (Total: %d)\n", c.Attack)
+		fmt.Printf("  - Défense : +1  (Total: %d)\n", c.Defense)
+		fmt.Println("Vos points de vie ont été entièrement restaurés !")
+		fmt.Printf("Prochain niveau à %d EXP.\n", c.NextLevelExp)
+		fmt.Println("---------------------------------")
+	}
+}
+
 // CharacterCreation guide l'utilisateur pour créer un nouveau personnage.
 func CharacterCreation() Character {
 	reader := bufio.NewReader(os.Stdin)
@@ -118,23 +163,23 @@ func CharacterCreation() Character {
 		case "1":
 			className = "Doom Slayer"
 			pvMax = 80
-			baseAttack = 12
-			baseDefense = 2
-			initiative = 12
+			baseAttack = 24
+			baseDefense = 4
+			initiative = 24
 			classIsValid = true
 		case "2":
 			className = "Doom Caster"
 			pvMax = 100
-			baseAttack = 8
-			baseDefense = 4
-			initiative = 8
+			baseAttack = 16
+			baseDefense = 8
+			initiative = 16
 			classIsValid = true
 		case "3":
 			className = "Doom Bastion"
 			pvMax = 120
-			baseAttack = 6
-			baseDefense = 8
-			initiative = 6
+			baseAttack = 12
+			baseDefense = 18
+			initiative = 12
 			classIsValid = true
 		default:
 			fmt.Println(Red + Bold + "  ❌ Choix invalide. Veuillez entrer 1, 2 ou 3." + Reset)

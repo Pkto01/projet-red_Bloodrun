@@ -92,6 +92,26 @@ func combatLoop(player *character.Character, adversary *Monster, monsterAction f
 		fmt.Printf("Vous avez vaincu : %s !\n", adversary.Name)
 		// player.GainExperience(adversary.ExperienceReward) // Décommentez quand vous aurez le système d'XP
 	}
+
+	// --- Fin du Combat ---
+	fmt.Println("\n---------- FIN DU COMBAT ----------")
+	if hasFled {
+		fmt.Println("Vous êtes retourné à l'entrée du donjon.")
+	} else if player.Pv <= 0 {
+		fmt.Println("Vous avez été vaincu... 💀")
+	} else {
+		fmt.Printf("Vous avez vaincu : %s !\n", adversary.Name)
+
+		// --- Attribution des récompenses ---
+		fmt.Printf("Vous gagnez %d pièces d'or.\n", adversary.GoldReward)
+		player.Money += adversary.GoldReward
+
+		fmt.Printf("Vous obtenez : %s.\n", adversary.LootDrop)
+		display.AddInventory(player, adversary.LootDrop)
+
+		fmt.Printf("Vous gagnez %d points d'expérience.\n", adversary.ExperienceReward)
+		player.GainExperience(adversary.ExperienceReward)
+	}
 }
 
 // --- PATTERNS SPÉCIFIQUES POUR CHAQUE MONSTRE ---

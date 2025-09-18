@@ -1,18 +1,20 @@
 package fight
 
-// Monster définit la structure d'un adversaire.
+// Monster définit la structure d'un adversaire avec ses récompenses.
 type Monster struct {
 	Name             string
 	Pvmax            int
 	Pv               int
 	Attack           int
 	Defense          int
-	ExperienceReward int // Ajout de la récompense en expérience
+	ExperienceReward int
+	GoldReward       int    // Ajout de la récompense en Or
+	LootDrop         string // Ajout du butin spécifique
 }
 
 // --- Monstre d'entraînement ---
 
-// InitGoblin crée et retourne un Gobelin d'entraînement avec des stats prédéfinies.
+// InitGoblin crée un Gobelin d'entraînement.
 func InitGoblin() Monster {
 	return Monster{
 		Name:             "Gobelin d'entraînement",
@@ -20,7 +22,9 @@ func InitGoblin() Monster {
 		Pv:               60,
 		Attack:           5,
 		Defense:          2,
-		ExperienceReward: 5, // Récompense de base pour le test
+		ExperienceReward: 5,
+		GoldReward:       10,
+		LootDrop:         "Os Fêlés", // Les gobelins peuvent aussi laisser des os
 	}
 }
 
@@ -35,6 +39,8 @@ func InitGouleSanguine() Monster {
 		Attack:           8,
 		Defense:          3,
 		ExperienceReward: 10,
+		GoldReward:       15,
+		LootDrop:         "Fragments de Sang",
 	}
 }
 
@@ -47,6 +53,8 @@ func InitAbominationDeChair() Monster {
 		Attack:           12,
 		Defense:          5,
 		ExperienceReward: 25,
+		GoldReward:       30,
+		LootDrop:         "Étoffe Sanglante",
 	}
 }
 
@@ -59,6 +67,8 @@ func InitGardienSquelette() Monster {
 		Attack:           10,
 		Defense:          10,
 		ExperienceReward: 40,
+		GoldReward:       50,
+		LootDrop:         "Os Fêlés",
 	}
 }
 
@@ -71,6 +81,8 @@ func InitGolemDeLaForge() Monster {
 		Attack:           15,
 		Defense:          15,
 		ExperienceReward: 75,
+		GoldReward:       80,
+		LootDrop:         "Acier Noirci",
 	}
 }
 
@@ -83,5 +95,7 @@ func InitSeigneurSanglant() Monster {
 		Attack:           18,
 		Defense:          12,
 		ExperienceReward: 150,
+		GoldReward:       250,                // Grosse récompense en or
+		LootDrop:         "Coeur Démoniaque", // Un butin unique pour le boss
 	}
 }

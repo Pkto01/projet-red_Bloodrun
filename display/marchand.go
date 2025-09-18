@@ -79,7 +79,7 @@ func upgradeInventorySlot(j *character.Character) {
 	fmt.Println("\033[32mVotre capacité d'inventaire a été augmentée de +10 !\033[0m")
 }
 
-func addInventory(j *character.Character, itemName string) {
+func AddInventory(j *character.Character, itemName string) {
 	limit := getInventoryLimit(j.Class, j.InventoryUpgrades)
 	if len(j.Inventory) >= limit {
 		fmt.Println("\033[31mInventaire plein ! Impossible d'ajouter : " + itemName + "\033[0m")
@@ -204,7 +204,7 @@ func Marchand(j *character.Character, shop []Item) {
 			item := shop[choix-1]
 			if j.Money >= item.Prix {
 				j.Money -= item.Prix
-				addInventory(j, item.Nom)
+				AddInventory(j, item.Nom)
 				fmt.Printf("\033[32m>> Vous avez acheté : %s\033[0m\n", item.Nom)
 			} else {
 				fmt.Println("\033[31mPas assez d'argent !\033[0m")
@@ -220,7 +220,7 @@ func Marchand(j *character.Character, shop []Item) {
 				if item.Nom == "Augmentation d'inventaire" {
 					upgradeInventorySlot(j)
 				} else {
-					addInventory(j, item.Nom)
+					AddInventory(j, item.Nom)
 				}
 				fmt.Printf("\033[32m>> Vous avez acheté : %s\033[0m\n", item.Nom)
 			} else {
@@ -287,7 +287,7 @@ func Forgeron(j *character.Character, recipes []CraftableItem) {
 			for material, quantity := range recipe.Requis {
 				j.Inventory = removeItems(j.Inventory, material, quantity)
 			}
-			addInventory(j, recipe.Nom)
+			AddInventory(j, recipe.Nom)
 			fmt.Printf("\033[32mVous avez fabriqué : %s !\033[0m\n", recipe.Nom)
 		}
 	}
