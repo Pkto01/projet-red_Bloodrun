@@ -21,4 +21,5 @@ type Character struct {
 	Inventory         []string
 	InventoryUpgrades int
 	Equipped          Equipment
+	Initiative        int
 }
