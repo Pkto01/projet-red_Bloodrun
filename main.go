@@ -149,8 +149,8 @@ func Menu(j *character.Character) {
 
 		switch choix {
 		case "1":
-    		loadingAnimation("Chargement des infos")
-    		display.DisplayInfo(*j)
+			loadingAnimation("Chargement des infos")
+			display.DisplayInfo(*j)
 		case "2":
 			loadingAnimation("Ouverture de l'inventaire")
 			display.AccessInventory(j)

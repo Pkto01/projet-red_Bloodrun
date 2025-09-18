@@ -201,9 +201,9 @@ func CharacterCreation() Character {
 	startingSpells := []Spell{} // Commence avec une liste de sorts vide
 	switch className {
 	case "Doom Caster":
-		startingSpells = append(startingSpells, Spell{Name: "Éclair de Givre", Damage: 15, Mana: 10})
+		startingSpells = append(startingSpells, Spell{Name: "Flammèche", Damage: 10, Mana: 10})
 	case "Doom Slayer":
-		startingSpells = append(startingSpells, Spell{Name: "Frappe Puissante", Damage: 18, Mana: 15})
+		startingSpells = append(startingSpells, Spell{Name: "Frappe Puissante", Damage: 12, Mana: 3})
 	case "Doom Bastion":
 		startingSpells = append(startingSpells, Spell{Name: "Coup de Bouclier", Damage: 8, Mana: 5})
 	}
