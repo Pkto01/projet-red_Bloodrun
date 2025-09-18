@@ -65,7 +65,6 @@ func afficherOption(numero int, texte string, details string) {
 func CharacterCreation() Character {
 	reader := bufio.NewReader(os.Stdin)
 	var name string
-	var initiative int // Variable pour stocker l'initiative
 
 	// --- Étape 1 : Choix du nom ---
 	afficherTitre("CRÉATION DU PERSONNAGE")
@@ -99,12 +98,18 @@ func CharacterCreation() Character {
 
 	var className string
 	var pvMax int
+	var baseAttack int
+	var baseDefense int
+	var initiative int
+
 	classIsValid := false
 	for !classIsValid {
+		// --- L'AFFICHAGE QUE J'AVAIS OUBLIÉ, MAINTENANT RÉINTÉGRÉ ---
 		fmt.Println(Cyan + Bold + "  Choisissez votre classe :\n" + Reset)
 		afficherOption(1, "Doom Slayer", Red+"(DPS élevé,   80 PV max)"+Reset+" - Rapide, frappe fort, mais fragile. ⚡")
 		afficherOption(2, "Doom Caster", Blue+"(DPS moyen,  100 PV max)"+Reset+" - Lance des sorts dévastateurs. 🔮")
 		afficherOption(3, "Doom Bastion", Green+"(Peu de DPS, 120 PV max)"+Reset+" - Encaisse les coups et protège le groupe. 🛡️")
+		// -----------------------------------------------------------------
 
 		fmt.Print(Green + Bold + "\n  ➤ Votre choix (1-3) : " + Reset)
 		choice, _ := reader.ReadString('\n')
@@ -113,17 +118,23 @@ func CharacterCreation() Character {
 		case "1":
 			className = "Doom Slayer"
 			pvMax = 80
-			initiative = 12 // Assignation de l'initiative pour Doom Slayer
+			baseAttack = 12
+			baseDefense = 2
+			initiative = 12
 			classIsValid = true
 		case "2":
 			className = "Doom Caster"
 			pvMax = 100
-			initiative = 8 // Assignation de l'initiative pour Doom Caster
+			baseAttack = 8
+			baseDefense = 4
+			initiative = 8
 			classIsValid = true
 		case "3":
 			className = "Doom Bastion"
 			pvMax = 120
-			initiative = 6 // Assignation de l'initiative pour Doom Bastion
+			baseAttack = 6
+			baseDefense = 8
+			initiative = 6
 			classIsValid = true
 		default:
 			fmt.Println(Red + Bold + "  ❌ Choix invalide. Veuillez entrer 1, 2 ou 3." + Reset)
@@ -134,37 +145,26 @@ func CharacterCreation() Character {
 	afficherTitre("FINALISATION")
 	fmt.Println()
 
-	// Calcul des PV de départ (50% des PV max)
-	pvCurrent := pvMax / 2
+	// Le personnage commence avec 100% de ses PV max
+	pvCurrent := pvMax
 	fmt.Printf(Green+Bold+"  ✅ Vous avez choisi la classe %s.\n"+Reset, className)
 	fmt.Printf(Green+Bold+"  ✅ Vous commencez l'aventure avec %d/%d PV.\n"+Reset, pvCurrent, pvMax)
-	fmt.Printf(Green+Bold+"  ✅ Votre initiative de base est de %d.\n"+Reset, initiative) // Confirmation de l'initiative
+	fmt.Printf(Green+Bold+"  ✅ Votre initiative de base est de %d.\n"+Reset, initiative)
 
-	// Initialisation des compétences et de l'inventaire de base (selon la première version)
-	startingSkills := []string{"Coup de Poing"}
-	startingInventory := []string{"Potion de vie"}
-	if className == "Doom Caster" {
-		startingSkills = append(startingSkills, "Éclair de Givre") // Exemple de compétence spécifique
-		startingInventory = append(startingInventory, "Mana Potion")
-	} else if className == "Doom Slayer" {
-		startingSkills = append(startingSkills, "Attaque Rapide")
-	} else if className == "Doom Bastion" {
-		startingSkills = append(startingSkills, "Provocation")
-	}
-
-	// Retourne le personnage créé en utilisant les données collectées
+	// Utilise InitCharacter avec TOUS les arguments requis dans le bon ordre
 	return InitCharacter(
 		formattedName,
 		className,
-		1,          // Level 1
-		100,        // Starting gold (adjust as needed, previous version had a very high number)
-		pvMax,      // Max HP based on class
-		pvCurrent,  // Current HP (50% of max)
-		10,         // Base Attack (could be class-dependent too, using a placeholder for now)
-		0,          // Exp
-		100,        // ExpMax
-		initiative, // Assignation de l'initiative finale
-		startingSkills,
-		startingInventory,
+		1,                         // Level
+		50,                        // Money
+		pvMax,                     // Pvmax (basé sur la classe)
+		pvCurrent,                 // Pv (commence avec 100% de vie)
+		baseAttack,                // Attack (basé sur la classe)
+		baseDefense,               // Defense (basé sur la classe)
+		0,                         // Experience
+		100,                       // NextLevelExp (exp nécessaire pour le niveau 2)
+		[]string{"Coup de Poing"}, // skills de base
+		[]string{"Potion de vie"}, // inventaire de base
+		initiative,                // Initiative (basé sur la classe)
 	)
 }

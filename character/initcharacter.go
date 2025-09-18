@@ -1,6 +1,21 @@
 package character
 
-func InitCharacter(Name string, Class string, Level int, Money int, Pvmax int, Pv int, skills []string, Inventory []string, Initiative int) Character {
+// InitCharacter initialise un nouveau personnage avec toutes ses statistiques de base.
+func InitCharacter(
+	Name string,
+	Class string,
+	Level int,
+	Money int,
+	Pvmax int,
+	Pv int,
+	Attack int,
+	Defense int,
+	Experience int,
+	NextLevelExp int,
+	skills []string,
+	Inventory []string,
+	Initiative int) Character {
+
 	return Character{
 		Name:              Name,
 		Class:             Class,
@@ -8,6 +23,10 @@ func InitCharacter(Name string, Class string, Level int, Money int, Pvmax int, P
 		Money:             Money,
 		Pvmax:             Pvmax,
 		Pv:                Pv,
+		Attack:            Attack,
+		Defense:           Defense,
+		Experience:        Experience,
+		NextLevelExp:      NextLevelExp,
 		skills:            skills,
 		Inventory:         Inventory,
 		InventoryUpgrades: 0,
