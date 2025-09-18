@@ -63,7 +63,7 @@ func equipItem(j *character.Character) {
 	j.Inventory = RemoveFromSliceByIndex(j.Inventory, inventoryIndex)
 
 	if oldItem != "Aucune" {
-		addInventory(j, oldItem)
+		AddInventory(j, oldItem)
 		fmt.Printf("\033[90m%s a été retourné à votre inventaire.\033[0m\n", oldItem)
 	}
 
