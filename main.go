@@ -6,6 +6,7 @@ import (
 	"os"
 	"projet-red_Bloodrun/character"
 	"projet-red_Bloodrun/display"
+	"projet-red_Bloodrun/fight"
 	"time"
 
 	"github.com/common-nighthawk/go-figure"
@@ -117,9 +118,14 @@ func Menu(j *character.Character) {
 		afficherOption(1, "Afficher les infos", "🧙")
 		afficherOption(2, "Accéder à l'inventaire", "🎒")
 		afficherOption(3, "Accéder au Marchant", "🛒")
+<<<<<<< HEAD
 		afficherOption(4, "Accéder au Forgeron", "⚒️")
 		afficherOption(5, "Accéder aux Abysses", "👾")
 		afficherOption(6, "Quitter le jeu", "🚪")
+=======
+		afficherOption(4, "Accéder au Forgeron", "⚒️ ")
+		afficherOption(5, "Quitter le jeu", "🚪")
+>>>>>>> 9bb36d548f6a86e1f03e2489288076ee96947d55
 		afficherSeparateur()
 
 		choix := display.LireEntree("\n" + Gray + "👉 Votre choix [" + Cyan + "1-5" + Gray + "] : " + Reset)
@@ -169,4 +175,17 @@ func main() {
 	player := character.CharacterCreation()
 
 	Menu(&player)
+
+	goblin := fight.Monster{
+		MName:   "Gobelin",
+		MPvmax:  30,
+		MPv:     30,
+		MAttack: 5,
+	}
+
+	fmt.Println(goblin.String())
+
+	// Le gobelin prend 8 dégâts
+	goblin.TakeDamage(8)
+	fmt.Println(goblin.String())
 }
