@@ -10,6 +10,7 @@ type Monster struct {
 	ExperienceReward int
 	GoldReward       int    // Ajout de la récompense en Or
 	LootDrop         string // Ajout du butin spécifique
+	Initiative       int
 }
 
 // --- Monstre d'entraînement ---
@@ -41,6 +42,7 @@ func InitGouleSanguine() Monster {
 		ExperienceReward: 10,
 		GoldReward:       15,
 		LootDrop:         "Fragments de Sang",
+		Initiative:       15,
 	}
 }
 
@@ -55,6 +57,7 @@ func InitAbominationDeChair() Monster {
 		ExperienceReward: 25,
 		GoldReward:       30,
 		LootDrop:         "Étoffe Sanglante",
+		Initiative:       20,
 	}
 }
 
@@ -69,6 +72,7 @@ func InitGardienSquelette() Monster {
 		ExperienceReward: 40,
 		GoldReward:       50,
 		LootDrop:         "Os Fêlés",
+		Initiative:       30,
 	}
 }
 
@@ -83,6 +87,7 @@ func InitGolemDeLaForge() Monster {
 		ExperienceReward: 75,
 		GoldReward:       80,
 		LootDrop:         "Acier Noirci",
+		Initiative:       45,
 	}
 }
 
@@ -97,5 +102,6 @@ func InitSeigneurSanglant() Monster {
 		ExperienceReward: 150,
 		GoldReward:       250,                // Grosse récompense en or
 		LootDrop:         "Coeur Démoniaque", // Un butin unique pour le boss
+		Initiative:       70,
 	}
 }

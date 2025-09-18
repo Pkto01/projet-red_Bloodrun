@@ -75,6 +75,7 @@ func playerTurn(player *character.Character, adversary *Monster) (combatOver boo
 			}
 
 			fmt.Printf("💧 Mana restant : %d/%d\n", player.Mana, player.Manamax)
+			turnOver = true
 
 		case "4": // FUIR
 			fmt.Println("Vous essayez de prendre la fuite...")
@@ -96,10 +97,34 @@ func playerTurn(player *character.Character, adversary *Monster) (combatOver boo
 	return false // Le combat n'est pas terminé
 }
 
+func determineFirstAttacker(player *character.Character, adversary *Monster) bool {
+	playerFirst := true
+	if adversary.Initiative > player.Initiative {
+		fmt.Printf("%s prend l'initiative et attaque en premier ! ⚡\n", adversary.Name)
+		playerFirst = false
+	} else if player.Initiative > adversary.Initiative {
+		fmt.Printf("%s agit plus vite et attaque en premier ! ⚡\n", player.Name)
+	} else {
+		// En cas d'égalité, on peut décider aléatoirement ou donner la priorité au joueur
+		if rand.Intn(2) == 0 { // 50% de chance pour le joueur d'attaquer en premier
+			fmt.Printf("Les deux combattants sont aussi rapides, mais %s prend l'avantage ! ⚡\n", player.Name)
+			playerFirst = true
+		} else {
+			fmt.Printf("Les deux combattants sont aussi rapides, mais %s prend l'avantage ! ⚡\n", adversary.Name)
+			playerFirst = false
+		}
+	}
+	time.Sleep(2 * time.Second) // Pause pour laisser le joueur lire le message d'initiative
+	return playerFirst
+}
+
 // combatLoop est la boucle de base pour tous les combats.
 func combatLoop(player *character.Character, adversary *Monster, monsterAction func(int, *Monster, *character.Character)) {
 	DisplayMonsterArt(adversary.Name)
 	fmt.Println("\n💥💥💥 LE COMBAT COMMENCE ! 💥💥💥")
+
+	playerFirst := determineFirstAttacker(player, adversary)
+
 	turn := 1
 	hasFled := false
 
@@ -107,20 +132,36 @@ func combatLoop(player *character.Character, adversary *Monster, monsterAction f
 		fmt.Printf("\n---------- TOUR %d ----------\n", turn)
 		fmt.Printf("PV Joueur: %d/%d | PV %s: %d/%d\n", player.Pv, player.Pvmax, adversary.Name, adversary.Pv, adversary.Pvmax)
 
-		// --- Tour du Joueur ---
-		if playerTurn(player, adversary) {
-			hasFled = true
-			break // Si playerTurn retourne true, le joueur a fui, on arrête le combat.
-		}
+		// Gestion de l'ordre des tours selon l'initiative
+		if playerFirst {
+			// --- Tour du Joueur ---
+			if playerTurn(player, adversary) {
+				hasFled = true
+				break // Si playerTurn retourne true, le joueur a fui, on arrête le combat.
+			}
+			// On vérifie si le monstre est mort après le tour du joueur
+			if adversary.Pv <= 0 {
+				break
+			}
+			time.Sleep(1 * time.Second)
 
-		// On vérifie si le monstre est mort après le tour du joueur
-		if adversary.Pv <= 0 {
-			break
-		}
-		time.Sleep(1 * time.Second)
+			// --- Tour du Monstre ---
+			monsterAction(turn, adversary, player)
+		} else { // C'est le tour du monstre en premier
+			// --- Tour du Monstre ---
+			monsterAction(turn, adversary, player)
+			// On vérifie si le joueur est mort après le tour du monstre
+			if player.Pv <= 0 {
+				break
+			}
+			time.Sleep(1 * time.Second)
 
-		// --- Tour du Monstre ---
-		monsterAction(turn, adversary, player)
+			// --- Tour du Joueur ---
+			if playerTurn(player, adversary) {
+				hasFled = true
+				break // Si playerTurn retourne true, le joueur a fui, on arrête le combat.
+			}
+		}
 
 		turn++
 		time.Sleep(1 * time.Second)
