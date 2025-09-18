@@ -6,24 +6,6 @@ import (
 	"strconv"
 )
 
-// itemTypes définit le slot pour chaque objet équipable.
-var itemTypes = map[string]string{
-	// Armes
-	"Hache de Berserker": "Weapon",
-	"Bâton d'Apprenti":   "Weapon",
-	"Marteau Lourd":      "Weapon",
-
-	// Armures
-	"Robe de Mage":       "Armor",
-	"Armure de Plaques":  "Armor",
-	"Bottes de Célérité": "Armor",
-
-	// Accessoires
-	"Bouclier en Acier":   "Accessory",
-	"Grimoire des Ombres": "Accessory",
-	"Gantelets de Force":  "Accessory",
-}
-
 // equipItem gère la logique pour équiper un objet de l'inventaire.
 func equipItem(j *character.Character) {
 	var equippableItems []string
@@ -31,7 +13,7 @@ func equipItem(j *character.Character) {
 
 	// On ne liste que les objets qui peuvent être équipés
 	for i, item := range j.Inventory {
-		if _, isEquippable := itemTypes[item]; isEquippable {
+		if _, isEquippable := ItemTypes[item]; isEquippable {
 			equippableItems = append(equippableItems, item)
 			originalIndices = append(originalIndices, i)
 		}
@@ -62,7 +44,7 @@ func equipItem(j *character.Character) {
 	selectedItemIndex := choix - 1
 	itemName := equippableItems[selectedItemIndex]
 	inventoryIndex := originalIndices[selectedItemIndex]
-	itemSlot := itemTypes[itemName]
+	itemSlot := ItemTypes[itemName]
 
 	// Logique de remplacement
 	var oldItem string
