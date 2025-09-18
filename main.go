@@ -7,6 +7,7 @@ import (
 	"projet-red_Bloodrun/character"
 	"projet-red_Bloodrun/display"
 	"projet-red_Bloodrun/fight"
+	"strconv"
 	"time"
 
 	"github.com/common-nighthawk/go-figure"
@@ -64,6 +65,26 @@ func loadingAnimation(msg string) {
 		fmt.Print(".")
 	}
 	fmt.Println()
+}
+
+func handleDungeonSelection(player *character.Character) {
+	display.DisplayDungeonMap() // Affiche la carte
+
+	choixStr := display.LireEntree("Choisissez un donjon (1-5) ou 0 pour retourner : ")
+	level, err := strconv.Atoi(choixStr) // Convertit le choix en nombre
+	if err != nil || level < 0 || level > 5 {
+		fmt.Println("Choix invalide.")
+		return
+	}
+
+	if level == 0 {
+		return
+	}
+
+	// Appel direct à la nouvelle fonction centralisée
+	fight.StartDungeonCombat(player, level)
+
+	isDead(player) // Vérifie si le joueur est mort après le combat
 }
 
 func spellBook(skills []string, newSpell string) []string {
@@ -143,8 +164,7 @@ func Menu(j *character.Character) {
 			display.Forgeron(j, forgeitem(j.Class))
 		case "5":
 			loadingAnimation("Arrivée dans les prodondeurs des abysses")
-			display.DisplayDungeonMap()
-			fight.SelectLevel()
+			handleDungeonSelection(j)
 		case "6":
 			fmt.Println(Red + Bold + ">> " + Reset + "Merci d'avoir joué à Bloodrun ! 💀")
 			quitter = true
@@ -172,17 +192,4 @@ func main() {
 	player := character.CharacterCreation()
 
 	Menu(&player)
-
-	goblin := fight.Monster{
-		MName:   "Gobelin",
-		MPvmax:  30,
-		MPv:     30,
-		MAttack: 5,
-	}
-
-	fmt.Println(goblin.String())
-
-	// Le gobelin prend 8 dégâts
-	goblin.TakeDamage(8)
-	fmt.Println(goblin.String())
 }

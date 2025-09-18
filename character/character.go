@@ -13,6 +13,10 @@ type Character struct {
 	Money             int
 	Pvmax             int
 	Pv                int
+	Attack            int
+	Defense           int
+	Experience        int
+	NextLevelExp      int
 	skills            []string
 	Inventory         []string
 	InventoryUpgrades int
