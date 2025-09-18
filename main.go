@@ -118,7 +118,8 @@ func Menu(j *character.Character) {
 		afficherOption(2, "Accéder à l'inventaire", "🎒")
 		afficherOption(3, "Accéder au Marchant", "🛒")
 		afficherOption(4, "Accéder au Forgeron", "⚒️")
-		afficherOption(5, "Quitter le jeu", "🚪")
+		afficherOption(5, "Accéder aux Abysses", "👾")
+		afficherOption(6, "Quitter le jeu", "🚪")
 		afficherSeparateur()
 
 		choix := display.LireEntree("\n" + Gray + "👉 Votre choix [" + Cyan + "1-5" + Gray + "] : " + Reset)
@@ -140,6 +141,8 @@ func Menu(j *character.Character) {
 			loadingAnimation("Arrivée chez le Forgeron")
 			display.Forgeron(j, forgeitem(j.Class))
 		case "5":
+			loadingAnimation("Arrivée dans les prodondeurs des abysses")
+		case "6":
 			fmt.Println(Red + Bold + ">> " + Reset + "Merci d'avoir joué à Bloodrun ! 💀")
 			quitter = true
 		default:
