@@ -1,28 +1,21 @@
 package fight
 
-import (
-	"fmt"
-)
-
+// Monster définit la structure d'un adversaire.
 type Monster struct {
-	MName   string
-	MPvmax  int
-	MPv     int
-	MAttack int
+	Name    string
+	Pvmax   int
+	Pv      int
+	Attack  int
+	Defense int
 }
 
-func (m *Monster) IsAlive() bool {
-	return m.MPv > 0
-}
-
-func (m *Monster) TakeDamage(damage int) {
-	m.MPv -= damage
-	if m.MPv < 0 {
-		m.MPv = 0
+// InitGoblin crée et retourne un Gobelin d'entraînement avec des stats prédéfinies.
+func InitGoblin() Monster {
+	return Monster{
+		Name:    "Gobelin d'entraînement",
+		Pvmax:   60,
+		Pv:      60,
+		Attack:  5,
+		Defense: 2,
 	}
-}
-
-func (m *Monster) String() string {
-	return fmt.Sprintf("%s | PV: %d/%d | ATK: %d",
-		m.MName, m.MPv, m.MPvmax, m.MAttack)
 }

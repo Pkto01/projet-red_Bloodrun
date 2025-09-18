@@ -41,34 +41,30 @@ func characterTurn() {
 	case "2":
 		fmt.Println("Vous consultez votre inventaire.")
 	case "3":
-		selectLevel()
+		SelectLevel()
 	default:
 		fmt.Println("Choix invalide.")
 	}
 }
 
 // Fonction pour sélectionner un niveau
-func selectLevel() {
+func SelectLevel() {
 	var levelChoice string
-	fmt.Println("\n--- Sélection des Niveaux ---")
-	fmt.Println("1. Niveau Facile")
-	fmt.Println("2. Niveau Moyen")
-	fmt.Println("3. Niveau Difficile")
-	fmt.Print("Choisissez un niveau (1, 2 ou 3) : ")
+	fmt.Print("Choisissez un niveau (1-5) : ")
 	fmt.Scanln(&levelChoice)
 
 	switch levelChoice {
 	case "1":
-		goblinPattern("Gobelin Facile", "Personnage 5", 100, []int{50, 50, 50})
+		goblinPattern("Gobelin Facile", "Personnage 1", 100, []int{50, 50, 50})
 	case "2":
-		goblinPattern("Gobelin Moyen", "Personnage 5", 150, []int{100, 200, 100})
+		goblinPattern("Gobelin Moyen", "Personnage 2", 150, []int{100, 200, 100})
 	case "3":
-		goblinPattern("Gobelin Difficile", "Personnage 5", 200, []int{150, 300, 150})
+		goblinPattern("Gobelin Difficile", "Personnage 3", 200, []int{150, 300, 150})
+	case "4":
+		goblinPattern("Gobelin Très Difficile", "Personnage 4", 250, []int{200, 400, 200})
+	case "5":
+		goblinPattern("Gobelin Extrême", "Personnage 5", 300, []int{250, 500, 250})
 	default:
 		fmt.Println("Choix invalide.")
 	}
-}
-
-func main() {
-	characterTurn()
 }
