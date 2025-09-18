@@ -6,6 +6,35 @@ import (
 	"strconv"
 )
 
+// RecalculateStats met à jour les stats totales du personnage en fonction de son équipement.
+func RecalculateStats(c *character.Character) {
+	c.Attack = c.BaseAttack
+	c.Defense = c.BaseDefense
+	c.Initiative = c.BaseInitiative
+
+
+	// Arme
+	if itemData, ok := ItemStatsDatabase[c.Equipped.Weapon]; ok {
+		c.Attack += itemData.Damage
+		c.Defense += itemData.Defense
+		c.Initiative += itemData.Initiative
+	}
+
+	// Armure
+	if itemData, ok := ItemStatsDatabase[c.Equipped.Armor]; ok {
+		c.Attack += itemData.Damage
+		c.Defense += itemData.Defense
+		c.Initiative += itemData.Initiative
+	}
+
+	// Accessoire
+	if itemData, ok := ItemStatsDatabase[c.Equipped.Accessory]; ok {
+		c.Attack += itemData.Damage
+		c.Defense += itemData.Defense
+		c.Initiative += itemData.Initiative
+	}
+}
+
 // equipItem gère la logique pour équiper un objet de l'inventaire.
 func equipItem(j *character.Character) {
 	var equippableItems []string
@@ -13,7 +42,7 @@ func equipItem(j *character.Character) {
 
 	// On ne liste que les objets qui peuvent être équipés
 	for i, item := range j.Inventory {
-		if _, isEquippable := ItemTypes[item]; isEquippable {
+		if _, isEquippable := ItemStatsDatabase[item]; isEquippable {
 			equippableItems = append(equippableItems, item)
 			originalIndices = append(originalIndices, i)
 		}
@@ -42,13 +71,14 @@ func equipItem(j *character.Character) {
 	}
 
 	selectedItemIndex := choix - 1
+
+	// --- Logique de remplacement  ---
 	itemName := equippableItems[selectedItemIndex]
 	inventoryIndex := originalIndices[selectedItemIndex]
-	itemSlot := ItemTypes[itemName]
+	itemData := ItemStatsDatabase[itemName]
 
-	// Logique de remplacement
 	var oldItem string
-	switch itemSlot {
+	switch itemData.Slot {
 	case "Weapon":
 		oldItem = j.Equipped.Weapon
 		j.Equipped.Weapon = itemName
@@ -67,7 +97,11 @@ func equipItem(j *character.Character) {
 		fmt.Printf("\033[90m%s a été retourné à votre inventaire.\033[0m\n", oldItem)
 	}
 
+	// On recalcule TOUTES les stats du personnage après le changement.
+	RecalculateStats(j)
+
 	fmt.Printf("\033[32mVous avez équipé : %s.\033[0m\n", itemName)
+	fmt.Printf("\033[90mStats mises à jour : Attaque %d, Défense %d, Initiative %d\033[0m\n", j.Attack, j.Defense, j.Initiative)
 }
 
 // AccessInventory mis à jour avec une pause pour une meilleure expérience utilisateur.

@@ -14,21 +14,26 @@ type Spell struct {
 }
 
 type Character struct {
-	Name              string
-	Class             string
-	Level             int
-	Money             int
-	Pvmax             int
-	Pv                int
-	Manamax           int
-	Mana              int
-	Attack            int
-	Defense           int
-	Experience        int
-	NextLevelExp      int
-	Spells            []Spell
-	Inventory         []string
+	Name string
+	Class string
+	Level int
+	Money int
+	Pvmax int
+	Pv int
+	Manamax int
+	Mana int
+	// Stats totales (celles qui changent avec l'équipement)
+	Attack int
+	Defense int
+	Initiative int
+	// Stats de base (celles qui augmentent avec les niveaux)
+	BaseAttack int
+	BaseDefense int
+	BaseInitiative int
+	Experience int
+	NextLevelExp int
+	Spells []Spell
+	Inventory []string
 	InventoryUpgrades int
-	Equipped          Equipment
-	Initiative        int
+	Equipped Equipment
 }

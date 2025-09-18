@@ -4,41 +4,24 @@ package display
 type ItemStats struct {
 	Damage  int
 	Defense int
-	Ability string // Une chaîne pour identifier une compétence spéciale
-}
-
-// ItemTypes définit le slot pour chaque objet équipable.
-var ItemTypes = map[string]string{
-	// Armes
-	"Hache de Berserker": "Weapon",
-	"Bâton d'Apprenti":   "Weapon",
-	"Marteau Lourd":      "Weapon",
-
-	// Armures
-	"Robe de Mage":      "Armor",
-	"Armure de Plaques": "Armor",
-
-	// Accessoires (les bottes sont plus logiques ici)
-	"Bottes de Célérité":  "Accessory",
-	"Bouclier en Acier":   "Accessory",
-	"Grimoire des Ombres": "Accessory",
-	"Gantelets de Force":  "Accessory",
+	Initiative int
+	Slot       string
 }
 
 // ItemStatsDatabase associe un nom d'objet à ses statistiques.
 var ItemStatsDatabase = map[string]ItemStats{
 	// Armes
-	"Hache de Berserker": {Damage: 15, Defense: 0, Ability: ""},
-	"Bâton d'Apprenti":   {Damage: 8, Defense: 0, Ability: ""},
-	"Marteau Lourd":      {Damage: 12, Defense: 0, Ability: ""},
+	"Hache de Berserker": {Damage: 20, Defense: 0, Initiative: 0, Slot: "Weapon"},
+	"Bâton d'Apprenti":   {Damage: 14, Defense: 0, Initiative: 12, Slot: "Weapon"},
+	"Marteau Lourd":      {Damage: 16, Defense: 0, Initiative: -5, Slot: "Weapon"},
 
 	// Armures
-	"Robe de Mage":      {Damage: 0, Defense: 5, Ability: ""},
-	"Armure de Plaques": {Damage: 0, Defense: 12, Ability: ""},
+	"Robe de Mage":      {Damage: 0, Defense: 22, Initiative: 12, Slot: "Armor"},
+	"Armure de Plaques": {Damage: 0, Defense: 30, Initiative: -5, Slot: "Armor"},
+	"Bottes de Célérité":  {Damage: 0, Defense: 10, Initiative: 20, Slot: "Armor"},
 
 	// Accessoires
-	"Bottes de Célérité":  {Damage: 0, Defense: 1, Ability: "Initiative"}, // Donne peu de défense mais une compétence clé
-	"Bouclier en Acier":   {Damage: 0, Defense: 8, Ability: ""},
-	"Grimoire des Ombres": {Damage: 5, Defense: 0, Ability: "MagieNoire"}, // Un grimoire peut aussi augmenter un peu les dégâts
-	"Gantelets de Force":  {Damage: 3, Defense: 2, Ability: ""},
+	"Bouclier en Acier":   {Damage: 0, Defense: 20, Initiative: -5, Slot: "Accessory"},
+	"Grimoire des Ombres": {Damage: 20, Defense: 0, Initiative: 12, Slot: "Accessory"},
+	"Gantelets de Force":  {Damage: 30, Defense: 15, Initiative: 5, Slot: "Accessory"},
 }

@@ -148,11 +148,8 @@ func Menu(j *character.Character) {
 
 		switch choix {
 		case "1":
-			loadingAnimation("Chargement des infos")
-			fmt.Println(Yellow + Bold + ">> " + Reset + "Infos du personnage :")
-			fmt.Printf("🧝 Nom : %s\n", j.Name)
-			fmt.Printf("⚔️ Classe : %s | 🎚️ Niveau : %d\n", j.Class, j.Level)
-			fmt.Printf("❤️ PV : %d/%d\n", j.Pv, j.Pvmax)
+    		loadingAnimation("Chargement des infos")
+    		display.DisplayInfo(*j)
 		case "2":
 			loadingAnimation("Ouverture de l'inventaire")
 			display.AccessInventory(j)
