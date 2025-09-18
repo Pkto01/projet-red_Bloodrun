@@ -101,6 +101,7 @@ func CharacterCreation() Character {
 	var baseAttack int
 	var baseDefense int
 	var initiative int
+	var mana int
 
 	classIsValid := false
 	for !classIsValid {
@@ -122,6 +123,7 @@ func CharacterCreation() Character {
 			baseDefense = 2
 			initiative = 12
 			classIsValid = true
+			mana = 0
 		case "2":
 			className = "Doom Caster"
 			pvMax = 100
@@ -129,6 +131,7 @@ func CharacterCreation() Character {
 			baseDefense = 4
 			initiative = 8
 			classIsValid = true
+			mana = 20
 		case "3":
 			className = "Doom Bastion"
 			pvMax = 120
@@ -136,6 +139,7 @@ func CharacterCreation() Character {
 			baseDefense = 8
 			initiative = 6
 			classIsValid = true
+			mana = 0
 		default:
 			fmt.Println(Red + Bold + "  ❌ Choix invalide. Veuillez entrer 1, 2 ou 3." + Reset)
 		}

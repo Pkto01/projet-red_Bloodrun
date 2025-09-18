@@ -14,7 +14,9 @@ func InitCharacter(
 	NextLevelExp int,
 	skills []string,
 	Inventory []string,
-	Initiative int) Character {
+	Initiative int,
+	Mana int,
+	Manamax int) Character {
 
 	return Character{
 		Name:              Name,
@@ -31,10 +33,17 @@ func InitCharacter(
 		Inventory:         Inventory,
 		InventoryUpgrades: 0,
 		Initiative:        Initiative,
+		Mana:              Mana,
+		Manamax:           Manamax,
 		Equipped: Equipment{
 			Weapon:    "Aucune",
 			Armor:     "Aucune",
 			Accessory: "Aucune",
+		},
+		Spells: []Spell{
+			{Name: "Coup de poing", Damage: 8, Heal: 0, Mana: 0},
+			{Name: "Boule de feu", Damage: 18, Heal: 0, Mana: 10},
+			{Name: "Soin", Damage: 0, Heal: 15, Mana: 8},
 		},
 	}
 }

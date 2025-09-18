@@ -6,6 +6,13 @@ type Equipment struct {
 	Accessory string
 }
 
+type Spell struct {
+	Name   string
+	Damage int
+	Heal   int
+	Mana   int
+}
+
 type Character struct {
 	Name              string
 	Class             string
@@ -22,4 +29,7 @@ type Character struct {
 	InventoryUpgrades int
 	Equipped          Equipment
 	Initiative        int
+	Spells            []Spell
+	Mana              int
+	Manamax           int
 }

@@ -32,7 +32,50 @@ func playerTurn(player *character.Character, adversary *Monster) (combatOver boo
 			// Après avoir utilisé l'inventaire (ex: une potion), le joueur peut encore agir.
 			// On ne met PAS turnOver à true, la boucle du menu se relance.
 
-		case "3": // FUIR
+		case "3":
+			fmt.Println("📖 Choisissez un sort :")
+			for i, spell := range player.Spells {
+				fmt.Printf("%d. %s (Dégâts: %d | Soin: %d | Mana: %d)\n",
+					i+1, spell.Name, spell.Damage, spell.Heal, spell.Mana)
+			}
+
+			var spellChoice int
+			fmt.Scanln(&spellChoice)
+
+			if spellChoice < 1 || spellChoice > len(player.Spells) {
+				fmt.Println("❌ Choix invalide, tour perdu...")
+				return
+			}
+
+			spell := player.Spells[spellChoice-1]
+
+			// Vérification du mana
+			if player.Mana < spell.Mana {
+				fmt.Printf("❌ Pas assez de mana ! (%d/%d requis)\n", player.Mana, spell.Mana)
+				return
+			}
+
+			// Consommation
+			player.Mana -= spell.Mana
+
+			if spell.Damage > 0 {
+				fmt.Printf("%s lance %s et inflige %d dégâts à %s !\n",
+					player.Name, spell.Name, spell.Damage, adversary.Name)
+				adversary.Pv -= spell.Damage
+			}
+
+			if spell.Heal > 0 {
+				player.Pv += spell.Heal
+				if player.Pv > player.Pvmax {
+					player.Pv = player.Pvmax
+				}
+				fmt.Printf("%s lance %s et récupère %d PV (PV: %d/%d) !\n",
+					player.Name, spell.Name, spell.Heal, player.Pv, player.Pvmax)
+			}
+
+			fmt.Printf("💧 Mana restant : %d/%d\n", player.Mana, player.Manamax)
+
+		case "4": // FUIR
 			fmt.Println("Vous essayez de prendre la fuite...")
 			time.Sleep(1 * time.Second)
 
