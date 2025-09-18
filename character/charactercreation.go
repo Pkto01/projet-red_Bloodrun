@@ -222,7 +222,7 @@ func CharacterCreation() Character {
 		0,              // Experience
 		100,            // NextLevelExp
 		startingSpells, // La nouvelle liste de sorts de départ
-		[]string{"Potion de vie", "Robe de Mage"},
+		[]string{"Potion de vie"},
 		initiative, // Initiative (basé sur la classe)
 	)
 }
