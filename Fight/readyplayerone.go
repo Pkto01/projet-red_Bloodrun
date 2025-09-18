@@ -6,7 +6,74 @@ import (
 	"projet-red_Bloodrun/character"
 	"projet-red_Bloodrun/display"
 	"time"
+	"strconv"
 )
+
+func applyPoisonToMonster(m *Monster) {
+	fmt.Println("La fiole de poison se brise sur l'ennemi, qui commence à convulser !")
+	for i := 0; i < 3; i++ {
+		time.Sleep(1 * time.Second)
+		damage := 10 // Les dégâts de poison ignorent la défense
+		m.Pv -= damage
+		if m.Pv < 0 {
+			m.Pv = 0
+		}
+		fmt.Printf("Le poison inflige %d dégâts! Points de vie de %s: %d/%d\n", damage, m.Name, m.Pv, m.Pvmax)
+	}
+}
+
+func useCombatItem(player *character.Character, adversary *Monster) (turnUsed bool) {
+	// 1. Lister les objets utilisables
+	var usableItems []string
+	var itemCounts = make(map[string]int)
+
+	for _, item := range player.Inventory {
+		if item == "Potion de vie" || item == "Potion de poison" {
+			if _, exists := itemCounts[item]; !exists {
+				usableItems = append(usableItems, item)
+			}
+			itemCounts[item]++
+		}
+	}
+
+	if len(usableItems) == 0 {
+		fmt.Println("Vous n'avez aucun objet utilisable en combat.")
+		return false // Aucun tour n'est utilisé, le joueur peut choisir une autre action
+	}
+
+	// 2. Afficher le menu des objets
+	fmt.Println("\n--- Inventaire de Combat ---")
+	for i, item := range usableItems {
+		fmt.Printf("%d. %s (x%d)\n", i+1, item, itemCounts[item])
+	}
+	fmt.Println("0. Retour")
+
+	choixStr := display.LireEntree("Quel objet utiliser ? ")
+	choix, _ := strconv.Atoi(choixStr)
+
+	if choix <= 0 || choix > len(usableItems) {
+		return false // L'utilisateur a choisi "Retour" ou un choix invalide
+	}
+
+	itemToUse := usableItems[choix-1]
+
+	// 3. Logique d'utilisation de l'objet
+	switch itemToUse {
+	case "Potion de vie":
+		player.Pv += 50 // ou une valeur de soin que vous définissez
+		if player.Pv > player.Pvmax {
+			player.Pv = player.Pvmax
+		}
+		fmt.Printf("Vous utilisez une Potion de vie ! Vos PV : %d/%d\n", player.Pv, player.Pvmax)
+	case "Potion de poison":
+		applyPoisonToMonster(adversary)
+	}
+
+	// 4. Retirer l'objet de l'inventaire
+	// player.Inventory = display.RemoveItem(player.Inventory, itemToUse)
+
+	return true // Utiliser un objet termine le tour
+}
 
 func playerTurn(player *character.Character, adversary *Monster) (combatOver bool) {
 	turnOver := false
@@ -29,10 +96,9 @@ func playerTurn(player *character.Character, adversary *Monster) (combatOver boo
 			turnOver = true // Attaquer termine le tour
 
 		case "2": // INVENTAIRE
-			display.AccessInventory(player)
-			// Après avoir utilisé l'inventaire (ex: une potion), le joueur peut encore agir.
-			// On ne met PAS turnOver à true, la boucle du menu se relance.
-
+			if useCombatItem(player, adversary) {
+				turnOver = true
+			}
 		case "3":
 			fmt.Println("📖 Choisissez un sort :")
 			for i, spell := range player.Spells {

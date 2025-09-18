@@ -82,14 +82,15 @@ func (c *Character) GainExperience(amount int) {
 
 		// 3. Augmenter le seuil pour le prochain niveau (ex: +50%)
 		// On utilise un float64 pour la multiplication pour plus de précision.
-		newNextLevelExp := float64(c.NextLevelExp) * 1.5
+		newNextLevelExp := float64(c.NextLevelExp) * 1.05
 		c.NextLevelExp = int(newNextLevelExp)
 
 		// 4. Améliorer les statistiques du personnage
 		// Ce sont les récompenses concrètes du level-up !
-		c.Pvmax += 15
+		c.Pvmax += 12
 		c.Attack += 3
 		c.Defense += 1
+		c.Initiative += 2
 
 		// 5. Restaurer entièrement les PV du joueur en récompense
 		c.Pv = c.Pvmax
@@ -212,7 +213,7 @@ func CharacterCreation() Character {
 		formattedName,
 		className,
 		1,              // Level
-		50,             // Money
+		500,             // Money
 		pvMax,          // Pvmax (basé sur la classe)
 		pvMax,          // Pv (commence avec 100% de vie)
 		manaMax,        // Manamax (basé sur la classe)

@@ -174,7 +174,7 @@ func Marchand(j *character.Character, shop []Item) {
 		for i, item := range shop {
 			fmt.Printf("%d. %s (%d pièces)\n", i+1, item.Nom, item.Prix)
 		}
-		fmt.Printf("%d. Augmentation d'inventaire", len(shop)+1)
+		fmt.Printf("%d. Augmentation d'inventaire\n", len(shop)+1)
 		fmt.Printf("%d. Vendre un objet\n", len(shop)+2)
 		fmt.Println("0. Retour")
 

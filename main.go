@@ -127,6 +127,7 @@ func forgeitem(class string) []display.CraftableItem {
 func shopitem() []display.Item {
 	return []display.Item{
 		{Nom: "Potion de vie", Prix: 20},
+		{Nom: "Potion de poison", Prix: 30},
 		{Nom: "Os Fêlés", Prix: 35},
 		{Nom: "Acier Noirci", Prix: 100},
 		{Nom: "Étoffe Sanglante", Prix: 60},
