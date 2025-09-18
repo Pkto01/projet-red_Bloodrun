@@ -14,7 +14,8 @@ func playerTurn(player *character.Character, adversary *Monster) (combatOver boo
 		fmt.Println("\n--- C'est votre tour ---")
 		fmt.Println("1. Attaquer")
 		fmt.Println("2. Inventaire")
-		fmt.Println("3. Fuir")
+		fmt.Println("3. Lancer un sort")
+		fmt.Println("4. Fuir")
 		choix := display.LireEntree("Votre choix : ")
 
 		switch choix {
