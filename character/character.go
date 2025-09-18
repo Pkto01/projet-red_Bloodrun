@@ -10,7 +10,7 @@ type Spell struct {
 	Name   string
 	Damage int
 	Heal   int
-	Mana   int
+	Mana   int // Coût en mana du sort
 }
 
 type Character struct {
@@ -20,16 +20,15 @@ type Character struct {
 	Money             int
 	Pvmax             int
 	Pv                int
+	Manamax           int
+	Mana              int
 	Attack            int
 	Defense           int
 	Experience        int
 	NextLevelExp      int
-	skills            []string
+	Spells            []Spell
 	Inventory         []string
 	InventoryUpgrades int
 	Equipped          Equipment
 	Initiative        int
-	Spells            []Spell
-	Mana              int
-	Manamax           int
 }

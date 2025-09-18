@@ -142,20 +142,16 @@ func CharacterCreation() Character {
 	fmt.Println()
 
 	var className string
-	var pvMax int
-	var baseAttack int
-	var baseDefense int
+	var pvMax, manaMax int
+	var baseAttack, baseDefense int
 	var initiative int
-	var mana int
 
 	classIsValid := false
 	for !classIsValid {
-		// --- L'AFFICHAGE QUE J'AVAIS OUBLIÉ, MAINTENANT RÉINTÉGRÉ ---
 		fmt.Println(Cyan + Bold + "  Choisissez votre classe :\n" + Reset)
 		afficherOption(1, "Doom Slayer", Red+"(DPS élevé,   80 PV max)"+Reset+" - Rapide, frappe fort, mais fragile. ⚡")
 		afficherOption(2, "Doom Caster", Blue+"(DPS moyen,  100 PV max)"+Reset+" - Lance des sorts dévastateurs. 🔮")
 		afficherOption(3, "Doom Bastion", Green+"(Peu de DPS, 120 PV max)"+Reset+" - Encaisse les coups et protège le groupe. 🛡️")
-		// -----------------------------------------------------------------
 
 		fmt.Print(Green + Bold + "\n  ➤ Votre choix (1-3) : " + Reset)
 		choice, _ := reader.ReadString('\n')
@@ -164,27 +160,27 @@ func CharacterCreation() Character {
 		case "1":
 			className = "Doom Slayer"
 			pvMax = 80
-			baseAttack = 24
-			baseDefense = 4
-			initiative = 24
+			manaMax = 20 // Peu de mana, pour des compétences physiques
+			baseAttack = 12
+			baseDefense = 2
+			initiative = 12
 			classIsValid = true
-			mana = 0
 		case "2":
 			className = "Doom Caster"
 			pvMax = 100
-			baseAttack = 16
-			baseDefense = 8
-			initiative = 16
+			manaMax = 80 // Beaucoup de mana
+			baseAttack = 8
+			baseDefense = 4
+			initiative = 8
 			classIsValid = true
-			mana = 20
 		case "3":
 			className = "Doom Bastion"
 			pvMax = 120
-			baseAttack = 12
-			baseDefense = 18
-			initiative = 12
+			manaMax = 30 // Mana modérée pour des compétences de défense
+			baseAttack = 6
+			baseDefense = 8
+			initiative = 6
 			classIsValid = true
-			mana = 0
 		default:
 			fmt.Println(Red + Bold + "  ❌ Choix invalide. Veuillez entrer 1, 2 ou 3." + Reset)
 		}
@@ -200,20 +196,33 @@ func CharacterCreation() Character {
 	fmt.Printf(Green+Bold+"  ✅ Vous commencez l'aventure avec %d/%d PV.\n"+Reset, pvCurrent, pvMax)
 	fmt.Printf(Green+Bold+"  ✅ Votre initiative de base est de %d.\n"+Reset, initiative)
 
+	// Définition des sorts de départ en fonction de la classe
+	startingSpells := []Spell{} // Commence avec une liste de sorts vide
+	switch className {
+	case "Doom Caster":
+		startingSpells = append(startingSpells, Spell{Name: "Éclair de Givre", Damage: 15, Mana: 10})
+	case "Doom Slayer":
+		startingSpells = append(startingSpells, Spell{Name: "Frappe Puissante", Damage: 18, Mana: 15})
+	case "Doom Bastion":
+		startingSpells = append(startingSpells, Spell{Name: "Coup de Bouclier", Damage: 8, Mana: 5})
+	}
+
 	// Utilise InitCharacter avec TOUS les arguments requis dans le bon ordre
 	return InitCharacter(
 		formattedName,
 		className,
-		1,                         // Level
-		50,                        // Money
-		pvMax,                     // Pvmax (basé sur la classe)
-		pvCurrent,                 // Pv (commence avec 100% de vie)
-		baseAttack,                // Attack (basé sur la classe)
-		baseDefense,               // Defense (basé sur la classe)
-		0,                         // Experience
-		100,                       // NextLevelExp (exp nécessaire pour le niveau 2)
-		[]string{"Coup de Poing"}, // skills de base
-		[]string{"Potion de vie"}, // inventaire de base
-		initiative,                // Initiative (basé sur la classe)
+		1,              // Level
+		50,             // Money
+		pvMax,          // Pvmax (basé sur la classe)
+		pvMax,          // Pv (commence avec 100% de vie)
+		manaMax,        // Manamax (basé sur la classe)
+		manaMax,        // Mana (commence avec 100% de mana)
+		baseAttack,     // Attack (basé sur la classe)
+		baseDefense,    // Defense (basé sur la classe)
+		0,              // Experience
+		100,            // NextLevelExp
+		startingSpells, // La nouvelle liste de sorts de départ
+		[]string{"Potion de vie"},
+		initiative, // Initiative (basé sur la classe)
 	)
 }

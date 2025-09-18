@@ -8,15 +8,15 @@ func InitCharacter(
 	Money int,
 	Pvmax int,
 	Pv int,
+	Manamax int,
+	Mana int,
 	Attack int,
 	Defense int,
 	Experience int,
 	NextLevelExp int,
-	skills []string,
+	Spells []Spell,
 	Inventory []string,
-	Initiative int,
-	Mana int,
-	Manamax int) Character {
+	Initiative int) Character {
 
 	return Character{
 		Name:              Name,
@@ -25,25 +25,20 @@ func InitCharacter(
 		Money:             Money,
 		Pvmax:             Pvmax,
 		Pv:                Pv,
+		Manamax:           Manamax,
+		Mana:              Mana,
 		Attack:            Attack,
 		Defense:           Defense,
 		Experience:        Experience,
 		NextLevelExp:      NextLevelExp,
-		skills:            skills,
+		Spells:            Spells,
 		Inventory:         Inventory,
 		InventoryUpgrades: 0,
 		Initiative:        Initiative,
-		Mana:              Mana,
-		Manamax:           Manamax,
 		Equipped: Equipment{
 			Weapon:    "Aucune",
 			Armor:     "Aucune",
 			Accessory: "Aucune",
-		},
-		Spells: []Spell{
-			{Name: "Coup de poing", Damage: 8, Heal: 0, Mana: 0},
-			{Name: "Boule de feu", Damage: 18, Heal: 0, Mana: 10},
-			{Name: "Soin", Damage: 0, Heal: 15, Mana: 8},
 		},
 	}
 }
