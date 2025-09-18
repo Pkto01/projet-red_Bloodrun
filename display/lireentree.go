@@ -15,6 +15,7 @@ const (
 	Blue   = "\033[34m"
 	Cyan   = "\033[36m"
 	Bold   = "\033[1m"
+	Gray   = "\033[90m"
 )
 
 // LireEntree lit une entrée de l'utilisateur depuis la console

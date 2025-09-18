@@ -143,6 +143,7 @@ func Menu(j *character.Character) {
 			display.Forgeron(j, forgeitem(j.Class))
 		case "5":
 			loadingAnimation("Arrivée dans les prodondeurs des abysses")
+			display.DisplayDungeonMap()
 		case "6":
 			fmt.Println(Red + Bold + ">> " + Reset + "Merci d'avoir joué à Bloodrun ! 💀")
 			quitter = true
