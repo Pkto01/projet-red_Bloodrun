@@ -50,12 +50,12 @@ func handleStatusEffects(player *character.Character) {
 }
 
 func useCombatItem(player *character.Character, adversary *Monster) (turnUsed bool) {
-	// 1. Lister les objets utilisables
 	var usableItems []string
 	var itemCounts = make(map[string]int)
 
+	// 1. Lister les objets utilisables (on ajoute "Potion de mana")
 	for _, item := range player.Inventory {
-		if item == "Potion de vie" || item == "Potion de poison" {
+		if item == "Potion de vie" || item == "Potion de poison" || item == "Potion de mana" {
 			if _, exists := itemCounts[item]; !exists {
 				usableItems = append(usableItems, item)
 			}
@@ -65,7 +65,7 @@ func useCombatItem(player *character.Character, adversary *Monster) (turnUsed bo
 
 	if len(usableItems) == 0 {
 		fmt.Println("Vous n'avez aucun objet utilisable en combat.")
-		return false // Aucun tour n'est utilisé, le joueur peut choisir une autre action
+		return false
 	}
 
 	// 2. Afficher le menu des objets
@@ -84,22 +84,30 @@ func useCombatItem(player *character.Character, adversary *Monster) (turnUsed bo
 
 	itemToUse := usableItems[choix-1]
 
-	// 3. Logique d'utilisation de l'objet
+	// 3. Logique d'utilisation de l'objet (MODIFIÉ)
 	switch itemToUse {
 	case "Potion de vie":
-		player.Pv += 50 // ou une valeur de soin que vous définissez
+		player.Pv += 50
 		if player.Pv > player.Pvmax {
 			player.Pv = player.Pvmax
 		}
 		fmt.Printf("Vous utilisez une Potion de vie ! Vos PV : %d/%d\n", player.Pv, player.Pvmax)
+
+	case "Potion de mana": // << LOGIQUE AJOUTÉE ICI
+		player.Mana += 40
+		if player.Mana > player.Manamax {
+			player.Mana = player.Manamax
+		}
+		fmt.Printf("Vous utilisez une Potion de mana ! Votre Mana : %d/%d\n", player.Mana, player.Manamax)
+
 	case "Potion de poison":
 		applyPoisonToMonster(adversary)
 	}
 
 	// 4. Retirer l'objet de l'inventaire
-	// player.Inventory = display.RemoveItem(player.Inventory, itemToUse)
+	player.Inventory = display.RemoveItemByName(player.Inventory, itemToUse)
 
-	return true // Utiliser un objet termine le tour
+	return true
 }
 
 func playerTurn(player *character.Character, adversary *Monster) (combatOver bool) {

@@ -34,6 +34,19 @@ func RecalculateStats(c *character.Character) {
 	}
 }
 
+// C'est la bonne méthode pour les objets consommables.
+func RemoveItemByName(inventory []string, itemName string) []string {
+	for i, item := range inventory {
+		if item == itemName {
+			// On a trouvé l'objet : on le retire en reconstruisant le slice
+			// et on retourne immédiatement le nouvel inventaire.
+			return append(inventory[:i], inventory[i+1:]...)
+		}
+	}
+	// Si l'objet n'est pas trouvé, on retourne l'inventaire tel quel.
+	return inventory
+}
+
 // equipItem gère la logique pour équiper un objet de l'inventaire.
 func equipItem(j *character.Character) {
 	var equippableItems []string
@@ -139,33 +152,32 @@ func AccessInventory(j *character.Character) {
 			}
 		}
 
-		// --- Section 3 : Menu d'actions ---
+		// --- Section 3 : Menu d'actions (MODIFIÉ) ---
 		fmt.Println("\n=== Menu Inventaire ===")
-		fmt.Println("1. Utiliser une potion de vie")
-		fmt.Println("2. Équiper un objet")
-		fmt.Println("3. Quitter")
+		fmt.Println("1. Utiliser une Potion de vie")
+		fmt.Println("2. Utiliser une Potion de mana") // Nouvelle option
+		fmt.Println("3. Équiper un objet")
+		fmt.Println("4. Quitter")
 
 		choix := LireEntree("Votre choix : ")
 
 		actionTaken := false
 		switch choix {
 		case "1":
-			if potionCount > 0 {
-				takePot(j)
-				actionTaken = true
-			} else {
-				fmt.Println("Vous n'avez pas de potions.")
-			}
+			takeHealthPot(j) // Appelle la bonne fonction
+			actionTaken = true
 		case "2":
-			equipItem(j)
+			takeManaPot(j) // Appelle la bonne fonction
 			actionTaken = true
 		case "3":
+			equipItem(j)
+			actionTaken = true
+		case "4":
 			fmt.Println("Retour au menu principal.")
 			quitter = true
 		default:
 			fmt.Println("Choix invalide !")
 		}
-
 		// Si une action a été effectuée, on fait une pause.
 		if actionTaken {
 			LireEntree("\nAppuyez sur Entrée pour continuer...")
@@ -188,8 +200,9 @@ func ShowInventory(j *character.Character) string {
 	return result
 }
 
-// takePot - Utilisation d'une potion (INCHANGÉ)
-func takePot(c *character.Character) {
+// --- Utilisation d'une Potion de Vie ---
+func takeHealthPot(c *character.Character) {
+	// Cherche une potion de vie
 	found := -1
 	for i, item := range c.Inventory {
 		if item == "Potion de vie" {
@@ -197,41 +210,46 @@ func takePot(c *character.Character) {
 			break
 		}
 	}
-
 	if found == -1 {
 		fmt.Println("Pas de Potion de vie dans l'inventaire !")
 		return
 	}
 
-	c.Inventory = RemoveFromSliceByIndex(c.Inventory, found) // Utilise notre nouvelle fonction utilitaire
+	// Supprime UNE potion
+	c.Inventory = RemoveFromSliceByIndex(c.Inventory, found)
 
+	// Soigne le personnage
 	heal := 50
 	c.Pv += heal
 	if c.Pv > c.Pvmax {
 		c.Pv = c.Pvmax
 	}
+	fmt.Printf("%s utilise une Potion de vie (+%d PV) ! PV : %d/%d\n", c.Name, heal, c.Pv, c.Pvmax)
+}
 
-	fmt.Printf("%s utilise une potion de vie (+%d PV) ! PV : %d/%d\n", c.Name, heal, c.Pv, c.Pvmax)
-
+// --- Utilisation d'une Potion de Mana ---
+func takeManaPot(c *character.Character) {
+	// Cherche une potion de mana
+	found := -1
 	for i, item := range c.Inventory {
 		if item == "Potion de mana" {
 			found = i
 			break
 		}
 	}
-
 	if found == -1 {
 		fmt.Println("Pas de Potion de mana dans l'inventaire !")
 		return
 	}
 
-	c.Inventory = RemoveFromSliceByIndex(c.Inventory, found) // Utilise notre nouvelle fonction utilitaire
+	// Supprime UNE potion
+	c.Inventory = RemoveFromSliceByIndex(c.Inventory, found)
 
-	manaheal := 20
-	c.Pv += manaheal
+	// Restaure la mana
+	manaHeal := 40
+	c.Mana += manaHeal
 	if c.Mana > c.Manamax {
 		c.Mana = c.Manamax
 	}
-
-	fmt.Printf("%s utilise une potion de mana (+%d Mana) ! Mana : %d/%d\n", c.Name, manaheal, c.Mana, c.Manamax)
+	fmt.Printf("%s utilise une Potion de mana (+%d Mana) ! Mana : %d/%d\n", c.Name, manaHeal, c.Mana, c.Manamax)
 }
