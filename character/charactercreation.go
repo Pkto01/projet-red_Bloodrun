@@ -213,7 +213,7 @@ func CharacterCreation() Character {
 		formattedName,
 		className,
 		1,              // Level
-		50,             // Money
+		5000,           // Money
 		pvMax,          // Pvmax (basé sur la classe)
 		pvMax,          // Pv (commence avec 100% de vie)
 		manaMax,        // Manamax (basé sur la classe)

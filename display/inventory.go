@@ -12,7 +12,6 @@ func RecalculateStats(c *character.Character) {
 	c.Defense = c.BaseDefense
 	c.Initiative = c.BaseInitiative
 
-
 	// Arme
 	if itemData, ok := ItemStatsDatabase[c.Equipped.Weapon]; ok {
 		c.Attack += itemData.Damage
@@ -212,4 +211,26 @@ func takePot(c *character.Character) {
 	}
 
 	fmt.Printf("%s utilise une potion de vie (+%d PV) ! PV : %d/%d\n", c.Name, heal, c.Pv, c.Pvmax)
+
+	for i, item := range c.Inventory {
+		if item == "Potion de mana" {
+			found = i
+			break
+		}
+	}
+
+	if found == -1 {
+		fmt.Println("Pas de Potion de mana dans l'inventaire !")
+		return
+	}
+
+	c.Inventory = RemoveFromSliceByIndex(c.Inventory, found) // Utilise notre nouvelle fonction utilitaire
+
+	manaheal := 20
+	c.Pv += manaheal
+	if c.Mana > c.Manamax {
+		c.Mana = c.Manamax
+	}
+
+	fmt.Printf("%s utilise une potion de mana (+%d Mana) ! Mana : %d/%d\n", c.Name, manaheal, c.Mana, c.Manamax)
 }

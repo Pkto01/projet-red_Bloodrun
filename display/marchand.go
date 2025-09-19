@@ -187,6 +187,8 @@ func getItemSalePrice(itemName string) int {
 	// Consommables
 	case "Potion de vie":
 		basePrice = 20
+	case "Potion de mana":
+		basePrice = 30
 	case "Potion de poison":
 		basePrice = 30
 	// Équipements craftés

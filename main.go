@@ -128,6 +128,7 @@ func shopitem(class string) []display.ShopableItem {
 	items := []display.ShopableItem{
 		display.Item{Nom: "Potion de vie", Prix: 20},
 		display.Item{Nom: "Potion de poison", Prix: 30},
+		display.Item{Nom: "Potion de mana", Prix: 30},
 		display.Item{Nom: "Os Fêlés", Prix: 35},
 		display.Item{Nom: "Acier Noirci", Prix: 100},
 		display.Item{Nom: "Étoffe Sanglante", Prix: 60},
