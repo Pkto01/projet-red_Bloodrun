@@ -12,7 +12,6 @@ func RecalculateStats(c *character.Character) {
 	c.Defense = c.BaseDefense
 	c.Initiative = c.BaseInitiative
 
-
 	// Arme
 	if itemData, ok := ItemStatsDatabase[c.Equipped.Weapon]; ok {
 		c.Attack += itemData.Damage
@@ -104,20 +103,21 @@ func equipItem(j *character.Character) {
 	fmt.Printf("\033[90mStats mises à jour : Attaque %d, Défense %d, Initiative %d\033[0m\n", j.Attack, j.Defense, j.Initiative)
 }
 
-// AccessInventory mis à jour avec une pause pour une meilleure expérience utilisateur.
+// AccessInventory gère l'affichage de l'équipement et de l'inventaire, ainsi que les actions du joueur.
 func AccessInventory(j *character.Character) {
 	quitter := false
 	for !quitter {
 		fmt.Println("\n--- Inventaire & Équipement ---")
-		fmt.Printf("%s\n", ShowInventory(j))
-		// Affiche l'équipement actuel
+
+		// --- Section 1 : Équipement ---
 		fmt.Println("\033[1mÉquipé :\033[0m")
-		fmt.Printf("   Arme      : %s\n", j.Equipped.Weapon) // Assurez-vous d'utiliser "Equipped" si vous avez suivi ma correction précédente
+		fmt.Printf("   Arme      : %s\n", j.Equipped.Weapon)
 		fmt.Printf("   Armure    : %s\n", j.Equipped.Armor)
 		fmt.Printf("   Accessoire: %s\n", j.Equipped.Accessory)
 
-		// Affichage de l'inventaire
-		fmt.Println("\n\033[1mDans le sac :\033[0m")
+		// --- Section 2 : Inventaire (affichage unifié) ---
+		fmt.Println("\n\033[1mInventaire :\033[0m")
+
 		potionCount := 0
 		var otherItems []string
 		for _, item := range j.Inventory {
@@ -139,7 +139,7 @@ func AccessInventory(j *character.Character) {
 			}
 		}
 
-		// Menu d'actions
+		// --- Section 3 : Menu d'actions ---
 		fmt.Println("\n=== Menu Inventaire ===")
 		fmt.Println("1. Utiliser une potion de vie")
 		fmt.Println("2. Équiper un objet")
@@ -147,18 +147,18 @@ func AccessInventory(j *character.Character) {
 
 		choix := LireEntree("Votre choix : ")
 
-		actionTaken := false // Notre nouvelle variable pour contrôler la pause
+		actionTaken := false
 		switch choix {
 		case "1":
 			if potionCount > 0 {
 				takePot(j)
-				actionTaken = true // Une action a été effectuée
+				actionTaken = true
 			} else {
 				fmt.Println("Vous n'avez pas de potions.")
 			}
 		case "2":
 			equipItem(j)
-			actionTaken = true // Une action a été effectuée
+			actionTaken = true
 		case "3":
 			fmt.Println("Retour au menu principal.")
 			quitter = true
@@ -166,7 +166,7 @@ func AccessInventory(j *character.Character) {
 			fmt.Println("Choix invalide !")
 		}
 
-		// Si une action a été effectuée (et qu'on ne quitte pas), on fait une pause.
+		// Si une action a été effectuée, on fait une pause.
 		if actionTaken {
 			LireEntree("\nAppuyez sur Entrée pour continuer...")
 		}
