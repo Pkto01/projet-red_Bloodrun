@@ -7,8 +7,19 @@ import (
 	"strings"
 )
 
+type ShopableItem interface {
+	GetName() string
+	GetPrice() int
+	IsSpell() bool
+}
+
 // Item est utilisé pour les objets simples (achat/vente)
 type Item struct {
+	Nom  string
+	Prix int
+}
+
+type ItemSpell struct {
 	Nom  string
 	Prix int
 }
@@ -18,6 +29,32 @@ type CraftableItem struct {
 	Nom    string
 	Prix   int
 	Requis map[string]int // Map[nom_materiau]quantité
+}
+
+func (i Item) GetName() string {
+	return i.Nom
+}
+
+func (i Item) GetPrice() int {
+	return i.Prix
+}
+
+func (i Item) IsSpell() bool {
+	return false // Un Item n'est pas un sort
+}
+
+// --- Méthodes pour la struct ItemSpell ---
+
+func (is ItemSpell) GetName() string {
+	return is.Nom
+}
+
+func (is ItemSpell) GetPrice() int {
+	return is.Prix
+}
+
+func (is ItemSpell) IsSpell() bool {
+	return true // Un ItemSpell est un sort
 }
 
 // --- Fonctions d'aide à l'inventaire ---
@@ -87,6 +124,51 @@ func AddInventory(j *character.Character, itemName string) {
 	}
 	j.Inventory = append(j.Inventory, itemName)
 
+}
+
+func AddSpell(c *character.Character, spellName string) {
+	var allSpellsInGame = map[string]character.Spell{
+		"Flammèche":          {Name: "Flammèche", Damage: 10, Mana: 10},
+		"Frappe Puissante":   {Name: "Frappe Puissante", Damage: 12, Mana: 3},
+		"Coup de Bouclier":   {Name: "Coup de Bouclier", Damage: 8, Mana: 5},
+		"Entaille Sanglante": {Name: "Entaille Sanglante", Damage: 150, Mana: 7},
+		"Ruée Des Enfers":    {Name: "Ruée Des Enfers", Damage: 250, Mana: 8},
+		"Boule De Feu":       {Name: "Boule De Feu", Damage: 150, Mana: 17},
+		"Blizzard Infernal":  {Name: "Blizzard Infernal", Damage: 250, Mana: 25},
+		"Protection Du Bastion": {
+			Name:        "Protection Du Bastion",
+			Mana:        8,
+			Effect:      "DefenseBuff", // Type d'effet
+			EffectValue: 20,            // Augmente la défense de 20
+			Duration:    4,             // Dure 3 tours après le tour où il est lancé
+		},
+		"Contre Attaque": {
+			Name:        "Contre Attaque",
+			Mana:        10,
+			Effect:      "CounterAttack", // Type d'effet
+			EffectValue: 50,              // Renvoie 50% des dégâts
+			Duration:    2,               // Actif pour le prochain tour du monstre
+		},
+		// Ajoutez ici TOUS les sorts qui existent dans votre jeu
+	}
+
+	spellToAdd, exists := allSpellsInGame[spellName]
+	if !exists {
+		fmt.Printf("Erreur : Tentative d'ajout d'un sort inconnu : %s\n", spellName)
+		return // Le sort n'existe pas, on ne fait rien.
+	}
+
+	// ÉTAPE B : Vérifier si le personnage connaît déjà ce sort.
+	for _, existingSpell := range c.Spells {
+		if existingSpell.Name == spellToAdd.Name {
+			fmt.Printf("Vous connaissez déjà le sort '%s'.\n", spellToAdd.Name)
+			return // On arrête, car le sort est déjà connu.
+		}
+	}
+
+	// ÉTAPE C : Ajouter le sort à la liste des sorts du personnage.
+	c.Spells = append(c.Spells, spellToAdd)
+	fmt.Printf("Nouveau sort appris : %s !\n", spellToAdd.Name)
 }
 
 // getItemSalePrice retourne le prix de vente d'un objet (50% du prix de base).
@@ -167,12 +249,12 @@ func sellItem(j *character.Character) {
 }
 
 // Marchand gère l'achat et l'accès au menu de vente.
-func Marchand(j *character.Character, shop []Item) {
+func Marchand(j *character.Character, shop []ShopableItem) {
 	for {
 		fmt.Println("\n=== Marchand ===")
 		fmt.Printf("Argent disponible : %d pièces\n", j.Money)
 		for i, item := range shop {
-			fmt.Printf("%d. %s (%d pièces)\n", i+1, item.Nom, item.Prix)
+			fmt.Printf("%d. %s (%d pièces)\n", i+1, item.GetName(), item.GetPrice())
 		}
 		fmt.Printf("%d. Augmentation d'inventaire\n", len(shop)+1)
 		fmt.Printf("%d. Vendre un objet\n", len(shop)+2)
@@ -201,31 +283,30 @@ func Marchand(j *character.Character, shop []Item) {
 
 		// Logique d'achat
 		if choix > 0 && choix <= len(shop) {
-			item := shop[choix-1]
-			if j.Money >= item.Prix {
-				j.Money -= item.Prix
-				AddInventory(j, item.Nom)
-				fmt.Printf("\033[32m>> Vous avez acheté : %s\033[0m\n", item.Nom)
+			item := shop[choix-1] // item est maintenant de type ShopableItem
+
+			if j.Money >= item.GetPrice() {
+				j.Money -= item.GetPrice()
+
+				// Vérifie si l'objet est un sort
+				if item.IsSpell() {
+					// Si c'est un sort, on l'ajoute au grimoire du joueur
+					AddSpell(j, item.GetName()) // Assurez-vous d'avoir la méthode AddSpell
+					fmt.Printf("\033[36m>> Vous avez appris le sort : %s\033[0m\n", item.GetName())
+				} else {
+					// Sinon, c'est un objet normal, on l'ajoute à l'inventaire
+					if item.GetName() == "Augmentation d'inventaire" {
+						upgradeInventorySlot(j)
+					} else {
+						AddInventory(j, item.GetName())
+						fmt.Printf("\033[32m>> Vous avez acheté : %s\033[0m\n", item.GetName())
+					}
+				}
 			} else {
 				fmt.Println("\033[31mPas assez d'argent !\033[0m")
 			}
 		} else {
 			fmt.Println("Choix invalide.")
-		}
-
-		if choix > 0 && choix <= len(shop) {
-			item := shop[choix-1]
-			if j.Money >= item.Prix {
-				j.Money -= item.Prix
-				if item.Nom == "Augmentation d'inventaire" {
-					upgradeInventorySlot(j)
-				} else {
-					AddInventory(j, item.Nom)
-				}
-				fmt.Printf("\033[32m>> Vous avez acheté : %s\033[0m\n", item.Nom)
-			} else {
-				fmt.Printf("\033[31mPas assez d'argent !\033[0m")
-			}
 		}
 
 	}

@@ -5,8 +5,8 @@ import (
 	"math/rand"
 	"projet-red_Bloodrun/character"
 	"projet-red_Bloodrun/display"
-	"time"
 	"strconv"
+	"time"
 )
 
 func applyPoisonToMonster(m *Monster) {
@@ -19,6 +19,33 @@ func applyPoisonToMonster(m *Monster) {
 			m.Pv = 0
 		}
 		fmt.Printf("Le poison inflige %d dégâts! Points de vie de %s: %d/%d\n", damage, m.Name, m.Pv, m.Pvmax)
+	}
+}
+func handleStatusEffects(player *character.Character) {
+	// On ne peut pas modifier une map pendant qu'on la parcourt,
+	// donc on stocke les effets à supprimer dans une liste.
+	effectsToRemove := []string{}
+
+	for effect, duration := range player.ActiveEffects {
+		// Décrémente la durée de l'effet
+		player.ActiveEffects[effect] = duration - 1
+
+		// Si l'effet est terminé
+		if player.ActiveEffects[effect] <= 0 {
+			effectsToRemove = append(effectsToRemove, effect)
+		}
+	}
+
+	// Retire les effets terminés
+	for _, effectName := range effectsToRemove {
+		fmt.Printf("L'effet '%s' s'est dissipé.\n", effectName)
+		delete(player.ActiveEffects, effectName)
+
+		// Si c'était un buff de défense, on retire le bonus !
+		if effectName == "DefenseBuff" {
+			player.Defense -= player.DefenseBuffAmount
+			player.DefenseBuffAmount = 0 // On remet à zéro
+		}
 	}
 }
 
@@ -122,6 +149,29 @@ func playerTurn(player *character.Character, adversary *Monster) (combatOver boo
 				return
 			}
 
+			if spell.Damage > 0 {
+				// ... (votre code pour les sorts à dégâts directs)
+			}
+			if spell.Heal > 0 {
+				// ... (votre code pour les sorts de soin)
+			}
+			if spell.Effect != "" {
+				// C'est un sort avec un effet sur la durée !
+				player.ActiveEffects[spell.Effect] = spell.Duration
+
+				fmt.Printf("✨ Vous lancez %s ! ✨\n", spell.Name)
+
+				if spell.Effect == "DefenseBuff" {
+					// On applique le buff de défense immédiatement
+					player.Defense += spell.EffectValue
+					player.DefenseBuffAmount = spell.EffectValue // On sauvegarde la valeur pour pouvoir la retirer plus tard
+					fmt.Printf("Votre défense augmente de %d points !\n", spell.EffectValue)
+				}
+				if spell.Effect == "CounterAttack" {
+					fmt.Println("Vous vous préparez à renvoyer la prochaine attaque !")
+				}
+			}
+
 			// Consommation
 			player.Mana -= spell.Mana
 
@@ -197,7 +247,7 @@ func combatLoop(player *character.Character, adversary *Monster, monsterAction f
 	for player.Pv > 0 && adversary.Pv > 0 {
 		fmt.Printf("\n---------- TOUR %d ----------\n", turn)
 		fmt.Printf("PV Joueur: %d/%d | PV %s: %d/%d\n", player.Pv, player.Pvmax, adversary.Name, adversary.Pv, adversary.Pvmax)
-
+		handleStatusEffects(player)
 		// Gestion de l'ordre des tours selon l'initiative
 		if playerFirst {
 			// --- Tour du Joueur ---
@@ -276,6 +326,12 @@ func GouleSanguinePattern(player *character.Character, goule *Monster) {
 		}
 		p.Pv -= damage
 		fmt.Printf("%s vous mord et inflige %d de dégâts.\n", m.Name, damage)
+		if _, isActive := p.ActiveEffects["CounterAttack"]; isActive {
+			counterDamage := damage / 2 // 50% des dégâts subis
+			m.Pv -= counterDamage
+			fmt.Printf("💥 Vous renvoyez l'attaque et infligez %d dégâts à %s !\n", counterDamage, m.Name)
+		}
+
 		fmt.Printf("Vos points de vie : %d/%d PV\n", p.Pv, p.Pvmax)
 	})
 }
@@ -296,6 +352,11 @@ func AbominationPattern(player *character.Character, abomination *Monster) {
 		}
 		p.Pv -= damage
 		fmt.Printf("%s vous inflige %d de dégâts.\n", m.Name, damage)
+		if _, isActive := p.ActiveEffects["CounterAttack"]; isActive {
+			counterDamage := damage / 2 // 50% des dégâts subis
+			m.Pv -= counterDamage
+			fmt.Printf("💥 Vous renvoyez l'attaque et infligez %d dégâts à %s !\n", counterDamage, m.Name)
+		}
 		fmt.Printf("Vos points de vie : %d/%d PV\n", p.Pv, p.Pvmax)
 	})
 }
@@ -317,6 +378,11 @@ func SquelettePattern(player *character.Character, squelette *Monster) {
 			}
 			p.Pv -= damage
 			fmt.Printf("%s vous frappe avec son épée rouillée et inflige %d de dégâts.\n", m.Name, damage)
+			if _, isActive := p.ActiveEffects["CounterAttack"]; isActive {
+				counterDamage := damage / 2 // 50% des dégâts subis
+				m.Pv -= counterDamage
+				fmt.Printf("💥 Vous renvoyez l'attaque et infligez %d dégâts à %s !\n", counterDamage, m.Name)
+			}
 			fmt.Printf("Vos points de vie : %d/%d PV\n", p.Pv, p.Pvmax)
 		}
 	})
@@ -345,6 +411,11 @@ func GolemPattern(player *character.Character, golem *Monster) {
 		}
 		p.Pv -= damage
 		fmt.Printf("%s vous assène un coup brûlant et inflige %d de dégâts.\n", m.Name, damage)
+		if _, isActive := p.ActiveEffects["CounterAttack"]; isActive {
+			counterDamage := damage / 2 // 50% des dégâts subis
+			m.Pv -= counterDamage
+			fmt.Printf("💥 Vous renvoyez l'attaque et infligez %d dégâts à %s !\n", counterDamage, m.Name)
+		}
 		fmt.Printf("Vos points de vie : %d/%d PV\n", p.Pv, p.Pvmax)
 	})
 }
@@ -355,7 +426,7 @@ func SeigneurSanglantPattern(player *character.Character, boss *Monster) {
 	combatLoop(player, boss, func(turn int, m *Monster, p *character.Character) {
 		if m.Pv < m.Pvmax/2 && !isEnraged {
 			fmt.Println("Le Seigneur Sanglant entre dans une rage folle ! Sa puissance augmente !")
-			m.Attack += 10
+			m.Attack += 35
 			isEnraged = true
 		}
 
@@ -379,6 +450,11 @@ func SeigneurSanglantPattern(player *character.Character, boss *Monster) {
 			}
 			p.Pv -= damage
 			fmt.Printf("%s vous frappe violemment et inflige %d de dégâts.\n", m.Name, damage)
+		}
+		if _, isActive := p.ActiveEffects["CounterAttack"]; isActive {
+			counterDamage := m.Attack / 2 // 50% des dégâts subis
+			m.Pv -= counterDamage
+			fmt.Printf("💥 Vous renvoyez l'attaque et infligez %d dégâts à %s !\n", counterDamage, m.Name)
 		}
 		fmt.Printf("Vos points de vie : %d/%d PV\n", p.Pv, p.Pvmax)
 	})

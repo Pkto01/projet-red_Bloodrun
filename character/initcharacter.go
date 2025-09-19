@@ -43,5 +43,6 @@ func InitCharacter(
 			Armor:     "Aucune",
 			Accessory: "Aucune",
 		},
+		ActiveEffects: make(map[string]int),
 	}
 }

@@ -124,14 +124,29 @@ func forgeitem(class string) []display.CraftableItem {
 }
 
 // shopitem définit ce que le MARCHAND vend (potions et matériaux de fabrication).
-func shopitem() []display.Item {
-	return []display.Item{
-		{Nom: "Potion de vie", Prix: 20},
-		{Nom: "Potion de poison", Prix: 30},
-		{Nom: "Os Fêlés", Prix: 35},
-		{Nom: "Acier Noirci", Prix: 100},
-		{Nom: "Étoffe Sanglante", Prix: 60},
+func shopitem(class string) []display.ShopableItem {
+	items := []display.ShopableItem{
+		display.Item{Nom: "Potion de vie", Prix: 20},
+		display.Item{Nom: "Potion de poison", Prix: 30},
+		display.Item{Nom: "Os Fêlés", Prix: 35},
+		display.Item{Nom: "Acier Noirci", Prix: 100},
+		display.Item{Nom: "Étoffe Sanglante", Prix: 60},
 	}
+
+	switch class {
+	case "Doom Slayer":
+		items = append(items, display.ItemSpell{Nom: "Entaille Sanglante", Prix: 150})
+		items = append(items, display.ItemSpell{Nom: "Ruée Des Enfers", Prix: 250})
+
+	case "Doom Caster":
+		items = append(items, display.ItemSpell{Nom: "Boule De Feu", Prix: 150})
+		items = append(items, display.ItemSpell{Nom: "Blizzard Infernal", Prix: 250})
+
+	case "Doom Bastion":
+		items = append(items, display.ItemSpell{Nom: "Protection Du Bastion", Prix: 150})
+		items = append(items, display.ItemSpell{Nom: "Contre Attaque", Prix: 250})
+	}
+	return items
 }
 func Menu(j *character.Character) {
 	quitter := false
@@ -156,7 +171,7 @@ func Menu(j *character.Character) {
 			display.AccessInventory(j)
 		case "3":
 			loadingAnimation("Arrivée chez le Marchand")
-			display.Marchand(j, shopitem())
+			display.Marchand(j, shopitem(j.Class))
 		case "4":
 			loadingAnimation("Arrivée chez le Forgeron")
 			display.Forgeron(j, forgeitem(j.Class))
