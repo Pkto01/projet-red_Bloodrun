@@ -129,12 +129,12 @@ func AddInventory(j *character.Character, itemName string) {
 func AddSpell(c *character.Character, spellName string) {
 	var allSpellsInGame = map[string]character.Spell{
 		"Flammèche":          {Name: "Flammèche", Damage: 10, Mana: 10},
-		"Frappe Puissante":   {Name: "Frappe Puissante", Damage: 12, Mana: 3},
+		"Frappe Puissante":   {Name: "Frappe Puissante", Damage: 15, Mana: 3},
 		"Coup de Bouclier":   {Name: "Coup de Bouclier", Damage: 8, Mana: 5},
-		"Entaille Sanglante": {Name: "Entaille Sanglante", Damage: 150, Mana: 7},
-		"Ruée Des Enfers":    {Name: "Ruée Des Enfers", Damage: 250, Mana: 8},
-		"Boule De Feu":       {Name: "Boule De Feu", Damage: 150, Mana: 17},
-		"Blizzard Infernal":  {Name: "Blizzard Infernal", Damage: 250, Mana: 25},
+		"Entaille Sanglante": {Name: "Entaille Sanglante", Damage: 90, Mana: 7},
+		"Ruée Des Enfers":    {Name: "Ruée Des Enfers", Damage: 125, Mana: 8},
+		"Boule De Feu":       {Name: "Boule De Feu", Damage: 80, Mana: 17},
+		"Blizzard Infernal":  {Name: "Blizzard Infernal", Damage: 125, Mana: 25},
 		"Protection Du Bastion": {
 			Name:        "Protection Du Bastion",
 			Mana:        8,
