@@ -160,7 +160,7 @@ func Menu(j *character.Character) {
 		afficherOption(6, "Quitter le jeu", "🚪")
 		afficherSeparateur()
 
-		choix := display.LireEntree("\n" + Gray + "👉 Votre choix [" + Cyan + "1-5" + Gray + "] : " + Reset)
+		choix := display.LireEntree("\n" + Gray + "👉 Votre choix [" + Cyan + "1-6" + Gray + "] : " + Reset)
 
 		switch choix {
 		case "1":

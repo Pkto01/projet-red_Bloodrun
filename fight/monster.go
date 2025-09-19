@@ -37,10 +37,10 @@ func InitGouleSanguine() Monster {
 		Name:             "Goule Sanguine",
 		Pvmax:            80,
 		Pv:               80,
-		Attack:           24,
+		Attack:           11,
 		Defense:          3,
 		ExperienceReward: 50,
-		GoldReward:       15,
+		GoldReward:       30,
 		LootDrop:         "Fragments de Sang",
 		Initiative:       15,
 	}
@@ -55,7 +55,7 @@ func InitAbominationDeChair() Monster {
 		Attack:           48,
 		Defense:          5,
 		ExperienceReward: 150,
-		GoldReward:       30,
+		GoldReward:       50,
 		LootDrop:         "Étoffe Sanglante",
 		Initiative:       20,
 	}
@@ -70,7 +70,7 @@ func InitGardienSquelette() Monster {
 		Attack:           83,
 		Defense:          10,
 		ExperienceReward: 500,
-		GoldReward:       50,
+		GoldReward:       100,
 		LootDrop:         "Os Fêlés",
 		Initiative:       30,
 	}
@@ -85,7 +85,7 @@ func InitGolemDeLaForge() Monster {
 		Attack:           140,
 		Defense:          15,
 		ExperienceReward: 1400,
-		GoldReward:       80,
+		GoldReward:       600,
 		LootDrop:         "Acier Noirci",
 		Initiative:       45,
 	}
@@ -100,7 +100,7 @@ func InitSeigneurSanglant() Monster {
 		Attack:           200,
 		Defense:          12,
 		ExperienceReward: 5000000,
-		GoldReward:       250000,             // Grosse récompense en or
+		GoldReward:       25000000000000000,  // Grosse récompense en or
 		LootDrop:         "Coeur Démoniaque", // Un butin unique pour le boss
 		Initiative:       70,
 	}
