@@ -299,17 +299,6 @@ func combatLoop(player *character.Character, adversary *Monster, monsterAction f
 		fmt.Println("Vous avez été vaincu... 💀")
 	} else {
 		fmt.Printf("Vous avez vaincu : %s !\n", adversary.Name)
-		// player.GainExperience(adversary.ExperienceReward) // Décommentez quand vous aurez le système d'XP
-	}
-
-	// --- Fin du Combat ---
-	fmt.Println("\n---------- FIN DU COMBAT ----------")
-	if hasFled {
-		fmt.Println("Vous êtes retourné à l'entrée du donjon.")
-	} else if player.Pv <= 0 {
-		fmt.Println("Vous avez été vaincu... 💀")
-	} else {
-		fmt.Printf("Vous avez vaincu : %s !\n", adversary.Name)
 
 		// --- Attribution des récompenses ---
 		fmt.Printf("Vous gagnez %d pièces d'or.\n", adversary.GoldReward)
